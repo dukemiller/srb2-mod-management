@@ -1,24 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace srb2_mod_management.Views.Components
+﻿namespace srb2_mod_management.Views.Components
 {
     /// <summary>
     /// Interaction logic for Mod.xaml
     /// </summary>
-    public partial class Mod : UserControl
+    public partial class Mod
     {
         public Mod()
         {

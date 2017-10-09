@@ -40,6 +40,7 @@ namespace srb2_mod_management.ViewModels
             FindModsCommand = new RelayCommand(() => MessengerInstance.Send(Enums.Views.Discover));
             StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
             DeleteCommand = new RelayCommand(Delete);
+            PromoteCommand = new RelayCommand(Promote);
             GamePath = _settings.GamePath;
 
             Levels = _downloadedMods.Levels;
@@ -57,6 +58,8 @@ namespace srb2_mod_management.ViewModels
         public RelayCommand StartCommand { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
+
+        public RelayCommand PromoteCommand { get; set; }
 
         public int Index
         {
@@ -163,6 +166,14 @@ namespace srb2_mod_management.ViewModels
             }
             RaisePropertyChanged(nameof(TotalItems));
             RaisePropertyChanged(nameof(SelectedItems));
+        }
+
+        private async void Promote()
+        {
+            var collection = Index == 2 ? SelectedMods : Index == 1 ? SelectedCharacters : SelectedLevels;
+            foreach (var mod in collection)
+                mod.Promoted ^= true;
+            await _downloadedMods.Save();
         }
     }
 }

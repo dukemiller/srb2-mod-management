@@ -14,5 +14,6 @@ namespace srb2_mod_management.Repositories.Interface
         bool AlreadyContains(Category category, int id);
         Task Add(Category category, Mod mod);
         Task Remove(Category category, Mod mod);
+        Task Save();
     }
 }

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
     [Serializable]
-    public class Mod
+    public class Mod: ObservableObject
     {
+        private bool _promoted;
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -18,5 +21,12 @@ namespace srb2_mod_management.Models
 
         [JsonProperty("changed_things")]
         public List<string> ChangedThings { get; set; } = new List<string>();
+
+        [JsonProperty("promoted")]
+        public bool Promoted
+        {
+            get => _promoted;
+            set => Set(() => Promoted, ref _promoted, value);
+        }
     }
 }
