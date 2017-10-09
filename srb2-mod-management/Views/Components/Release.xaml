@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="srb2_mod_management.Views.Components.Release"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:components="clr-namespace:srb2_mod_management.ViewModels.Components"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance components:ReleaseViewModel}"
+             d:DesignHeight="400" d:DesignWidth="400">
+    <UserControl.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom" Content="{Binding DownloadText}" Command="{Binding DownloadCommand}" />
+        <TextBlock FontWeight="Bold" DockPanel.Dock="Top" TextWrapping="Wrap" FontSize="26" Text="{Binding Release.Name}" />
+        <TextBlock FontStyle="Italic" DockPanel.Dock="Top" TextWrapping="Wrap" Text="{Binding Release.ChangedThings, Converter={StaticResource ListConverter}}" />
+        <controls:MetroAnimatedSingleRowTabControl Margin="0,8">
+            <controls:MetroTabItem Header="Description">
+                <ScrollViewer DockPanel.Dock="Top" Margin="8">
+                    <TextBlock TextWrapping="Wrap" FontSize="18" Text="{Binding Release.Description}" />
+                </ScrollViewer>
+            </controls:MetroTabItem>
+            <controls:MetroTabItem Header="Screenshots">
+                <controls:MetroTabItem.InputBindings>
+                    <KeyBinding Key="Right" Command="{Binding NextImageCommand}"/>
+                    <KeyBinding Key="Left" Command="{Binding PreviousImageCommand}"/>
+                </controls:MetroTabItem.InputBindings>
+                <DockPanel IsVisibleChanged="Screenshots_OnIsVisibleChanged">
+                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Progress}"/>
+                        <Button Margin="5,0" DockPanel.Dock="Right" Command="{Binding NextImageCommand}">
+                            <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleRight" />
+                        </Button>
+                        <Button DockPanel.Dock="Right" Command="{Binding PreviousImageCommand}">
+                            <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleLeft" />
+                        </Button>
+                    </DockPanel>
+                    <Image Source="{Binding Image, UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
+            </controls:MetroTabItem>
+        </controls:MetroAnimatedSingleRowTabControl>
+    </DockPanel>
+</UserControl>

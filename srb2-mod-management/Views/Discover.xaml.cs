@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace srb2_mod_management
+namespace srb2_mod_management.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Discover.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Discover : UserControl
     {
-        public MainWindow()
+        public Discover()
         {
             InitializeComponent();
         }

@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="srb2_mod_management.Views.Components.Releases"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:components="clr-namespace:srb2_mod_management.ViewModels.Components"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             d:DataContext="{d:DesignInstance components:ReleasesViewModel}"
+             mc:Ignorable="d"
+             Name="ReleasesView"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style TargetType="DataGridCell" BasedOn="{StaticResource MetroDataGridCell}" x:Key="CenteredCell">
+            <Style.Setters>
+                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+            </Style.Setters>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+            <Label Content="{Binding PageNotification}" />
+            <Button Margin="5,0" DockPanel.Dock="Right" Command="{Binding NextPageCommand}">
+                <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleRight" />
+            </Button>
+            <Button DockPanel.Dock="Right" Command="{Binding PreviousPageCommand}">
+                <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleLeft" />
+            </Button>
+        </DockPanel>
+        <Separator DockPanel.Dock="Bottom" Margin="0,5" />
+        <DataGrid ItemsSource="{Binding Releases}"
+                  SelectedItem="{Binding SelectedRelease}"
+                  AutoGenerateColumns="False"
+                  UseLayoutRounding="True"
+                  IsReadOnly="True"
+                  Sorting="DataGrid_OnSorting"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow">
+            <DataGrid.InputBindings>
+                <MouseBinding Command="{Binding SelectCommand}" MouseAction="LeftDoubleClick" />
+                <KeyBinding Command="{Binding SelectCommand}" Key="Return" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="4*" Binding="{Binding Name}" Header="Name" />
+                <DataGridTemplateColumn Width="90" Header="Stars" SortMemberPath="Stars">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding StarCollection}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="5" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn CellStyle="{StaticResource CenteredCell}" Width="100" Binding="{Binding Views, StringFormat={}{0:N0}}" Header="Views" />
+                <DataGridTextColumn CellStyle="{StaticResource CenteredCell}" Width="140" Binding="{Binding LastReply, StringFormat=MM-dd-yyyy}" Header="Last Reply"/>
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style BasedOn="{StaticResource MetroDataGridRow}" TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AlreadyDownloaded}" Value="True">
+                            <Setter Property="Opacity" Value="0.4" />
+                            <Setter Property="FontStyle" Value="Italic" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=ReleasesView, Path=DataContext.LoadingPage, Mode=OneWay}" Value="True">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+    </DockPanel>
+</UserControl>
