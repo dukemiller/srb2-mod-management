@@ -29,6 +29,7 @@ namespace srb2_mod_management.ViewModels
         private bool _starting;
 
         private int _index;
+        private bool _openGl;
 
         // 
 
@@ -42,6 +43,7 @@ namespace srb2_mod_management.ViewModels
             DeleteCommand = new RelayCommand(Delete);
             PromoteCommand = new RelayCommand(Promote);
             GamePath = _settings.GamePath;
+            OpenGl = _settings.OpenGl;
 
             Levels = _downloadedMods.Levels;
             Characters = _downloadedMods.Characters;
@@ -120,8 +122,19 @@ namespace srb2_mod_management.ViewModels
             }
         }
 
+        public bool OpenGl
+        {
+            get => _openGl;
+            set
+            {
+                Set(() => OpenGl, ref _openGl, value);
+                _settings.OpenGl = value;
+                _settings.Save();
+            }
+        }
+
         // 
-        
+
         private async void Start()
         {
             Starting = true;
@@ -133,11 +146,16 @@ namespace srb2_mod_management.ViewModels
                     .Distinct()
             );
 
+            var arguments = $"-file {command}";
+
+            if (OpenGl)
+                arguments += " -opengl";
+
             var info = new ProcessStartInfo
             {
                 WorkingDirectory = _settings.GamePath,
                 FileName = _settings.GameExe,
-                Arguments = $"-file {command} -opengl",
+                Arguments = arguments,
                 CreateNoWindow = true
             };
 

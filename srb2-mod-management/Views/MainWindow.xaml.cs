@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
 using srb2_mod_management.ViewModels;
 
-namespace srb2_mod_management
+namespace srb2_mod_management.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,7 +12,6 @@ namespace srb2_mod_management
         public MainWindow()
         {
             InitializeComponent();
-            // SimpleIoc.Default.GetInstance<MainWindowViewModel>().DialogCoordinator = DialogCoordinator.Instance;
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)

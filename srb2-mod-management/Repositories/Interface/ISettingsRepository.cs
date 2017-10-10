@@ -4,6 +4,7 @@
     {
         string GamePath { get; set; }
         string GameExe { get; }
+        bool OpenGl { get; set; }
         void Save();
         bool PathValid();
     }

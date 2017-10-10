@@ -21,6 +21,9 @@ namespace srb2_mod_management.Repositories
         [JsonIgnore]
         public string GameExe => Path.Combine(GamePath, "srb2win.exe");
 
+        [JsonProperty("opengl")]
+        public bool OpenGl { get; set; } = true;
+
         [JsonProperty("game_path")]
         public string GamePath { get; set; } = "";
 
