@@ -174,7 +174,7 @@ namespace srb2_mod_management.Services
                     ? updateDate
                     : released;
 
-            var links = descriptionNode.SelectNodes(".//table/tr").Select(tr =>
+            var links = descriptionNode.SelectNodes(".//table[@cellspacing='3']/tr").Select(tr =>
                 new DownloadLink
                 {
                     Filename = CleanString(tr.SelectSingleNode(".//a").InnerText),
