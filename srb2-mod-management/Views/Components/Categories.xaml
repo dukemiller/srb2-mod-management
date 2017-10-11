@@ -15,8 +15,9 @@
         </Style>
     </UserControl.Resources>
     <UniformGrid Columns="1">
-        <Button Content="Mods" Command="{Binding ChooseCommand}" CommandParameter="Mods" />
         <Button Content="Levels" Margin="0,5" Command="{Binding ChooseCommand}" CommandParameter="Levels" />
         <Button Content="Characters" Command="{Binding ChooseCommand}" CommandParameter="Characters" />
+        <Button Content="Scripts" Margin="0,5" Command="{Binding ChooseCommand}" CommandParameter="Scripts" />
+        <Button Content="Mods"  Command="{Binding ChooseCommand}" CommandParameter="Mods" />
     </UniformGrid>
 </UserControl>

@@ -25,6 +25,9 @@ namespace srb2_mod_management.Repositories
         [JsonProperty("mods")]
         public ObservableCollection<Mod> Mods { get; set; } = new ObservableCollection<Mod>();
 
+        [JsonProperty("scripts")]
+        public ObservableCollection<Mod> Scripts { get; } = new ObservableCollection<Mod>();
+
         public bool AlreadyContains(Category category, Release release) => GetCollectionForCategory(category).Any(mod => mod?.Id == release.Id);
 
         public bool AlreadyContains(Category category, int id) => GetCollectionForCategory(category).Any(mod => mod?.Id == id);
@@ -48,6 +51,7 @@ namespace srb2_mod_management.Repositories
         {
             switch (category)
             {
+                
                 default:
                 case Category.Level:
                     return Levels;
@@ -55,6 +59,8 @@ namespace srb2_mod_management.Repositories
                     return Characters;
                 case Category.Mod:
                     return Mods;
+                case Category.Script:
+                    return Scripts;
             }
         }
 

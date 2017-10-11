@@ -40,5 +40,13 @@ namespace srb2_mod_management.Views
                 .Cast<Mod>());
             viewmodel.RaisePropertyChanged("SelectedItems");
         }
+
+        private void ScriptsListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewmodel = (HomeViewModel)DataContext;
+            viewmodel.SelectedScripts = new ObservableCollection<Mod>(ScriptsListBox.SelectedItems
+                .Cast<Mod>());
+            viewmodel.RaisePropertyChanged("SelectedItems");
+        }
     }
 }

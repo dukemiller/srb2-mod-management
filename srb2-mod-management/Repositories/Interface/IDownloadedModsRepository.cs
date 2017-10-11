@@ -10,6 +10,7 @@ namespace srb2_mod_management.Repositories.Interface
         ObservableCollection<Mod> Levels { get; }
         ObservableCollection<Mod> Characters { get; }
         ObservableCollection<Mod> Mods { get; }
+        ObservableCollection<Mod> Scripts { get; }
         bool AlreadyContains(Category category, Release release);
         bool AlreadyContains(Category category, int id);
         Task Add(Category category, Mod mod);

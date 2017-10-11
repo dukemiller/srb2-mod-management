@@ -30,6 +30,7 @@ namespace srb2_mod_management.ViewModels
 
         private int _index;
         private bool _openGl;
+        private ObservableCollection<Mod> _scripts;
 
         // 
 
@@ -48,6 +49,7 @@ namespace srb2_mod_management.ViewModels
             Levels = _downloadedMods.Levels;
             Characters = _downloadedMods.Characters;
             Mods = _downloadedMods.Mods;
+            Scripts = _downloadedMods.Scripts;
 
         }
 
@@ -97,15 +99,23 @@ namespace srb2_mod_management.ViewModels
             set => Set(() => Mods, ref _mods, value);
         }
 
+        public ObservableCollection<Mod> Scripts
+        {
+            get => _scripts;
+            set => Set(() => Scripts, ref _scripts, value);
+        }
+
         public ObservableCollection<Mod> SelectedLevels { get; set; } = new ObservableCollection<Mod>();
 
         public ObservableCollection<Mod> SelectedCharacters { get; set; } = new ObservableCollection<Mod>();
 
         public ObservableCollection<Mod> SelectedMods { get; set; } = new ObservableCollection<Mod>();
 
-        public int SelectedItems => SelectedLevels.Count + SelectedCharacters.Count + SelectedMods.Count;
+        public ObservableCollection<Mod> SelectedScripts { get; set; } = new ObservableCollection<Mod>();
 
-        public int TotalItems => Levels.Count + Characters.Count + Mods.Count;
+        public int SelectedItems => SelectedLevels.Count + SelectedCharacters.Count + SelectedMods.Count + SelectedScripts.Count;
+
+        public int TotalItems => Levels.Count + Characters.Count + Mods.Count + Scripts.Count;
 
         public string GamePath
         {
@@ -139,7 +149,7 @@ namespace srb2_mod_management.ViewModels
         {
             Starting = true;
 
-            var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods);
+            var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
             var command = string.Join(" ",
                 mods.SelectMany(mod => mod.Files)
                     .Where(file => new[] {".wad", ".lua"}.Any(ext => file.ToLower().EndsWith(ext)))
@@ -173,8 +183,8 @@ namespace srb2_mod_management.ViewModels
 
         private async void Delete()
         {
-            var collection = Index == 2 ? SelectedMods : Index == 1 ? SelectedCharacters : SelectedLevels;
-            var category = Index == 2 ? Category.Mod : Index == 1 ? Category.Character : Category.Level;
+            var collection = Index == 3 ? SelectedMods : Index == 2 ? SelectedScripts : Index == 1 ? SelectedCharacters : SelectedLevels;
+            var category = Index == 3 ? Category.Mod : Index == 2 ? Category.Script : Index == 1 ? Category.Character : Category.Level;
             foreach (var mod in collection.ToList())
             {
                 foreach(var file in mod.Files)
@@ -188,7 +198,7 @@ namespace srb2_mod_management.ViewModels
 
         private async void Promote()
         {
-            var collection = Index == 2 ? SelectedMods : Index == 1 ? SelectedCharacters : SelectedLevels;
+            var collection = Index == 3 ? SelectedMods : Index == 2 ? SelectedScripts : Index == 1 ? SelectedCharacters : SelectedLevels;
             foreach (var mod in collection)
                 mod.Promoted ^= true;
             await _downloadedMods.Save();

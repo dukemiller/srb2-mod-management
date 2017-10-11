@@ -57,6 +57,11 @@
                              SelectionChanged="CharactersListBox_OnSelectionChanged"
                              Name="CharactersListBox" />
                 </controls:MetroTabItem>
+                <controls:MetroTabItem Header="Scripts">
+                    <ListBox ItemsSource="{Binding Scripts}"
+                             SelectionChanged="ScriptsListBox_OnSelectionChanged"
+                             Name="ScriptsListBox" />
+                </controls:MetroTabItem>
                 <controls:MetroTabItem Header="Full mods">
                     <ListBox ItemsSource="{Binding Mods}"
                              SelectionChanged="ModsListBox_OnSelectionChanged"

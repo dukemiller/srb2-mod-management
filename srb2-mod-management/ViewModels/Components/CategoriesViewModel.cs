@@ -51,6 +51,8 @@ namespace srb2_mod_management.ViewModels.Components
                     return Category.Mod;
                 case "Characters":
                     return Category.Character;
+                case "Scripts":
+                    return Category.Script;
                 case "Levels":
                 default:
                     return Category.Level;

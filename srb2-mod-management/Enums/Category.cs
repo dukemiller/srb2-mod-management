@@ -4,6 +4,7 @@
     {
         Level = 70,
         Character = 71,
-        Mod = 69
+        Mod = 69,
+        Script = 105
     }
 }

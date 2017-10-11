@@ -162,8 +162,8 @@ namespace srb2_mod_management.Services
 
             var screenshots = node
                 .SelectNodes(".//img[@class='thumbnail' or boolean(@onload)]")
-                .Select(img => CleanUrl(img.Attributes["src"].Value))
-                .ToList();
+                ?.Select(img => CleanUrl(img.Attributes["src"].Value))
+                .ToList() ?? new List<string>();
             
             var changedThings = node.SelectNodes(".//span//img/following-sibling::text()").Select(text => CleanString(text.InnerText)).ToList();
 
