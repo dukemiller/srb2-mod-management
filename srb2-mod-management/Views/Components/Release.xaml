@@ -29,7 +29,7 @@
                     <TextBlock TextWrapping="Wrap" FontSize="18" Text="{Binding Release.Description}" />
                 </ScrollViewer>
             </controls:MetroTabItem>
-            <controls:MetroTabItem Header="Screenshots">
+            <controls:MetroTabItem Header="Screenshots" IsEnabled="{Binding Release.Screenshots, Converter={StaticResource MoreThanZeroConverter}}">
                 <controls:MetroTabItem.InputBindings>
                     <KeyBinding Key="Right" Command="{Binding NextImageCommand}"/>
                     <KeyBinding Key="Left" Command="{Binding PreviousImageCommand}"/>

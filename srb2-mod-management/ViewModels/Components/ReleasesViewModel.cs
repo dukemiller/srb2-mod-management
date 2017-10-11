@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -18,6 +19,7 @@ namespace srb2_mod_management.ViewModels.Components
         private DiscoverModel _model;
         private int _pageNumber;
         private bool _loadingPage;
+        private bool _lastPage;
 
         // 
 
@@ -25,7 +27,7 @@ namespace srb2_mod_management.ViewModels.Components
         {
             _modService = modService;
             SelectCommand = new RelayCommand(Select, () => !LoadingPage);
-            NextPageCommand = new RelayCommand(NextPage, () => !LoadingPage && Releases.Count == 20);
+            NextPageCommand = new RelayCommand(NextPage, () => !LoadingPage && !LastPage);
             PreviousPageCommand = new RelayCommand(PreviousPage, () => !LoadingPage && PageNumber > 0);
         }
 
@@ -58,6 +60,17 @@ namespace srb2_mod_management.ViewModels.Components
                 NextPageCommand.RaiseCanExecuteChanged();
                 PreviousPageCommand.RaiseCanExecuteChanged();
                 SelectCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public bool LastPage
+        {
+            get => _lastPage;
+            set
+            {
+                Set(() => LastPage, ref _lastPage, value);
+                NextPageCommand.RaiseCanExecuteChanged();
+                PreviousPageCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -99,6 +112,7 @@ namespace srb2_mod_management.ViewModels.Components
             PageNumber = 0;
             Page = await _modService.RetrievePage(_model.Category, PageNumber);
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
+            LastPage = Page.Releases.Count < 20;
             LoadingPage = false;
             return this;
         }
@@ -109,6 +123,7 @@ namespace srb2_mod_management.ViewModels.Components
             PageNumber = Math.Min(PageNumber + 1, 9);
             Page = await _modService.RetrievePage(_model.Category, PageNumber);
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
+            LastPage = Page.Releases.Count < 20;
             LoadingPage = false;
         }
 
