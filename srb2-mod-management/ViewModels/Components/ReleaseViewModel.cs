@@ -212,7 +212,7 @@ namespace srb2_mod_management.ViewModels.Components
             {
                 // For parted files, only extract the first file
                 if (new[]{".zip", ".rar"}.Any(ext => filepath.EndsWith(ext)) 
-                    && !Regex.Match(filepath, @"part[_ +-.]?(?:0?[2-9]|1\d])", RegexOptions.IgnoreCase).Success)
+                    && !Regex.Match(filepath, @"(part[_ +-.]?(?:0?[2-9]|1\d])|7z.\d?\d[1-9])", RegexOptions.IgnoreCase).Success)
                 {
                     using (var archive = ArchiveFactory.Open(filepath))
                         foreach (var entry in archive.Entries)
