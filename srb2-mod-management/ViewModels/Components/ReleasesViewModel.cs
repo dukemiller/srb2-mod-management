@@ -132,6 +132,7 @@ namespace srb2_mod_management.ViewModels.Components
             LoadingPage = true;
             PageNumber = Math.Max(PageNumber - 1, 0);
             Page = await _modService.RetrievePage(_model.Category, PageNumber);
+            LastPage = Page.Releases.Count < 20;
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LoadingPage = false;
         }
