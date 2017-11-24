@@ -44,7 +44,7 @@
                             <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleLeft" />
                         </Button>
                     </DockPanel>
-                    <Image Source="{Binding Image, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Image Source="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
             </controls:MetroTabItem>
         </controls:MetroAnimatedSingleRowTabControl>

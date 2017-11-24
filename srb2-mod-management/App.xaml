@@ -25,6 +25,8 @@
             <srb2ModManagement:ViewModelLocator x:Key="Locator" />
             <classes:ListToCommaDelimitedConverter x:Key="ListConverter" />
             <classes:MoreThanZeroConverter x:Key="MoreThanZeroConverter" />
+            <classes:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+            <classes:BoolVisibilityReverseConverter x:Key="BoolVisibilityReverseConverter" />
 
             <Storyboard x:Key="FadeTransition">
                 <DoubleAnimation Duration="0:0:0.35"

@@ -51,7 +51,6 @@ namespace srb2_mod_management.Repositories
         {
             switch (category)
             {
-                
                 default:
                 case Category.Level:
                     return Levels;

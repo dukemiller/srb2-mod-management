@@ -68,7 +68,7 @@ namespace srb2_mod_management.ViewModels
             else
                 MessengerInstance.Send(Enums.Views.Home);
         }
-        
+
         private void HandleAction(Actions action)
         {
             if (action == Actions.GoBack)

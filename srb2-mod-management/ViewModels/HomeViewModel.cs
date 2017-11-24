@@ -50,7 +50,6 @@ namespace srb2_mod_management.ViewModels
             Characters = _downloadedMods.Characters;
             Mods = _downloadedMods.Mods;
             Scripts = _downloadedMods.Scripts;
-
         }
 
         // 
