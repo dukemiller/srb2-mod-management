@@ -7,8 +7,9 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
+             Background="{StaticResource WindowBackgroundBrush}"
              d:DataContext="{d:DesignInstance components:ReleaseViewModel}"
-             d:DesignHeight="400" d:DesignWidth="400">
+             d:DesignHeight="560" d:DesignWidth="965">
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="BorderThickness" Value="0" />
@@ -20,23 +21,48 @@
         </Style>
     </UserControl.Resources>
     <DockPanel>
-        <Button DockPanel.Dock="Bottom" Content="{Binding DownloadText}" Command="{Binding DownloadCommand}" />
-        <TextBlock FontWeight="Bold" DockPanel.Dock="Top" TextWrapping="Wrap" FontSize="26" Text="{Binding Release.Name}" />
-        <TextBlock FontStyle="Italic" DockPanel.Dock="Top" TextWrapping="Wrap" Text="{Binding Release.ChangedThings, Converter={StaticResource ListConverter}}" />
+        <Grid DockPanel.Dock="Bottom">
+            <Button Command="{Binding DownloadCommand}" 
+                    Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityConverter}}"
+                    Content="{Binding DownloadText}"/>
+            <Label FontSize="18" 
+                   VerticalAlignment="Center"
+                   Opacity="0.4"
+                   Content="{Binding Status}" 
+                   Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityReverseConverter}}" />
+        </Grid>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="26"
+                       Text="{Binding Release.Name}" />
+            <DockPanel Grid.Column="1" LastChildFill="False">
+                <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding WebpageCommand}" ToolTip="Open the mod's forum post">
+                    <iconPacks:PackIconModern Kind="Page" Width="25" Height="25" />
+                </Button>
+            </DockPanel>
+        </Grid>
+        <TextBlock FontStyle="Italic" DockPanel.Dock="Top" TextWrapping="Wrap"
+                   Text="{Binding Release.ChangedThings, Converter={StaticResource ListConverter}}" />
         <controls:MetroAnimatedSingleRowTabControl Margin="0,8">
             <controls:MetroTabItem Header="Description">
-                <ScrollViewer DockPanel.Dock="Top" Margin="8">
-                    <TextBlock TextWrapping="Wrap" FontSize="18" Text="{Binding Release.Description}" />
-                </ScrollViewer>
+                <DockPanel>
+                    <ScrollViewer DockPanel.Dock="Top" Margin="8">
+                        <TextBlock TextWrapping="Wrap" FontSize="18" Text="{Binding Release.Description}" />
+                    </ScrollViewer>
+                </DockPanel>
             </controls:MetroTabItem>
-            <controls:MetroTabItem Header="Screenshots" IsEnabled="{Binding Release.Screenshots, Converter={StaticResource MoreThanZeroConverter}}">
+            <controls:MetroTabItem Header="Screenshots"
+                                   IsEnabled="{Binding Release.Screenshots, Converter={StaticResource MoreThanZeroConverter}}">
                 <controls:MetroTabItem.InputBindings>
-                    <KeyBinding Key="Right" Command="{Binding NextImageCommand}"/>
-                    <KeyBinding Key="Left" Command="{Binding PreviousImageCommand}"/>
+                    <KeyBinding Key="Right" Command="{Binding NextImageCommand}" />
+                    <KeyBinding Key="Left" Command="{Binding PreviousImageCommand}" />
                 </controls:MetroTabItem.InputBindings>
                 <DockPanel IsVisibleChanged="Screenshots_OnIsVisibleChanged">
                     <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Progress}"/>
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Progress}" />
                         <Button Margin="5,0" DockPanel.Dock="Right" Command="{Binding NextImageCommand}">
                             <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleRight" />
                         </Button>

@@ -8,7 +8,7 @@
              d:DataContext="{d:DesignInstance components:ReleasesViewModel}"
              mc:Ignorable="d"
              Name="ReleasesView"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="BorderThickness" Value="0" />

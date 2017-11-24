@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,6 +29,8 @@ namespace srb2_mod_management.ViewModels.Components
         private DiscoverModel _model;
         private bool _loadingImage;
         private bool _downloading;
+        private bool _notDownloaded;
+        private string _status;
 
         // 
 
@@ -37,6 +40,7 @@ namespace srb2_mod_management.ViewModels.Components
             _downloadedMods = downloadedMods;
             PreviousImageCommand = new RelayCommand(PreviousImage, () => !LoadingImage);
             NextImageCommand = new RelayCommand(NextImage, () => !LoadingImage);
+            WebpageCommand = new RelayCommand(() => Process.Start(_model.ReleaseInfo.Url));
         }
 
         // 
@@ -48,11 +52,13 @@ namespace srb2_mod_management.ViewModels.Components
             DownloadCommand = new RelayCommand(Download,
                 () => !_downloadedMods.AlreadyContains(_model.Category, Release)
                       && !Downloading);
+            NotDownloaded = !_downloadedMods.AlreadyContains(_model.Category, Release);
+            Status = "Available to use.";
             Index = 0;
             Image = "";
             return this;
         }
-
+        
         public async Task VisibleChanged(bool visible)
         {
             if (visible)
@@ -100,7 +106,21 @@ namespace srb2_mod_management.ViewModels.Components
             }
         }
        
+        public bool NotDownloaded
+        {
+            get => _notDownloaded;
+            set => Set(() => NotDownloaded, ref _notDownloaded, value);
+        }
+
+        public string Status
+        {
+            get => _status;
+            set => Set(() => Status, ref _status, value);
+        }
+
         public RelayCommand DownloadCommand { get; set; }
+
+        public RelayCommand WebpageCommand { get; set; }
 
         public RelayCommand PreviousImageCommand { get; set; }
 
@@ -108,11 +128,8 @@ namespace srb2_mod_management.ViewModels.Components
 
         public string Progress => $"{Index + 1}/{Release.Screenshots.Count}";
 
-        public string DownloadText => !_downloadedMods.AlreadyContains(_model.Category, Release)
-            ? "Download"
-            : "Downloaded";
-
-
+        public string DownloadText => Downloading ? "Downloading ..." : "Download";
+        
         // 
 
         private async void PreviousImage()
@@ -186,6 +203,7 @@ namespace srb2_mod_management.ViewModels.Components
         private async void Download()
         {
             Downloading = true;
+            RaisePropertyChanged(nameof(DownloadText));
 
             // Create necessary paths
 
@@ -198,6 +216,7 @@ namespace srb2_mod_management.ViewModels.Components
             // Download and extract
 
             var downloaded = new List<string>();
+
             var extractedFiles = new List<string>();
 
             foreach (var download in Release.Downloads)
@@ -246,13 +265,14 @@ namespace srb2_mod_management.ViewModels.Components
                 Files = extractedFiles.Select(file => Path.Combine(path, file)).ToList(),
                 ChangedThings = Release.ChangedThings
             });
-            
+
             // Notify
 
+            NotDownloaded = false;
             Downloading = false;
-
-            DownloadCommand.RaiseCanExecuteChanged();
+            Status = "Download successful.";
             RaisePropertyChanged(nameof(DownloadText));
+            DownloadCommand.RaiseCanExecuteChanged();
         }
     }
 }
