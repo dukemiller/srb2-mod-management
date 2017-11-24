@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -167,6 +168,8 @@ namespace srb2_mod_management.ViewModels
                 _settings.Save();
             }
         }
+
+        public string Version => "version " + string.Concat(Assembly.GetExecutingAssembly().GetName().Version.ToString().Reverse().Skip(2).Reverse());
 
         // 
 

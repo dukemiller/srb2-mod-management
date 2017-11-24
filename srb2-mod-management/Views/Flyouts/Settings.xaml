@@ -7,8 +7,10 @@
              DataContext="{Binding Source={StaticResource Locator}, Path=Home}"
              Margin="4"
              TextElement.FontSize="22"
+             d:DesignHeight="400"
              Width="400">
     <DockPanel LastChildFill="False">
+        <Label DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.4" Content="{Binding Version}"/>
         <DockPanel DockPanel.Dock="Top">
             <Label VerticalAlignment="Center">SRB2 path:</Label>
             <TextBox Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"
