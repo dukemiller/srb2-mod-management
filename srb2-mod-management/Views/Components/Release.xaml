@@ -6,6 +6,7 @@
              xmlns:components="clr-namespace:srb2_mod_management.ViewModels.Components"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
              mc:Ignorable="d"
              Background="{StaticResource WindowBackgroundBrush}"
              d:DataContext="{d:DesignInstance components:ReleaseViewModel}"
@@ -70,7 +71,7 @@
                             <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleLeft" />
                         </Button>
                     </DockPanel>
-                    <Image Source="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
+                    <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
             </controls:MetroTabItem>
         </controls:MetroAnimatedSingleRowTabControl>
