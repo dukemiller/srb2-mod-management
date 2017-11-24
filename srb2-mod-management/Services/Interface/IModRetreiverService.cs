@@ -9,5 +9,6 @@ namespace srb2_mod_management.Services.Interface
         Task<Page> RetrievePage(Category category, int page);
         Task<Release> RetrieveRelease(ReleaseInfo release);
         Task UpdateRelease(Release release);
+        ReleaseInfo GetReleaseInfo(Mod mod, Category category);
     }
 }

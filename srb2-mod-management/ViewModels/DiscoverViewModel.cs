@@ -13,7 +13,7 @@ namespace srb2_mod_management.ViewModels
     {
         private ViewModelBase _display;
 
-        private readonly Stack<ComponentViews> _views = new Stack<ComponentViews>(); 
+        private readonly Stack<ComponentViews> _views = new Stack<ComponentViews>();
 
         // 
 
@@ -24,9 +24,12 @@ namespace srb2_mod_management.ViewModels
 
             MessengerInstance.Register<DiscoverModel>(this, HandleDiscoverModel);
             MessengerInstance.Register<Actions>(this, HandleAction);
-            
+            MessengerInstance.Register<ComponentViews>(this, HandleComponentView);
+            MessengerInstance.Register<(ReleaseInfo, Category)>(this, _ => HandleMod(_.Item1, _.Item2));
+
             BackCommand = new RelayCommand(Back);
         }
+
 
         // 
 
@@ -95,5 +98,36 @@ namespace srb2_mod_management.ViewModels
             _views.Push(discoverModel.RequestedView);
         }
 
+        private async void HandleMod(ReleaseInfo releaseInfo, Category category)
+        {
+            var model = new DiscoverModel
+            {
+                RequestedView = ComponentViews.Release,
+                Category = category,
+                ReleaseInfo = releaseInfo
+            };
+            
+            Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(model);
+
+            // _views.Clear();
+        }
+
+        private void HandleComponentView(ComponentViews view)
+        {
+            switch (view)
+            {
+                case ComponentViews.Categories:
+                    Display = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
+                    break;
+                case ComponentViews.Release:
+                    Display = SimpleIoc.Default.GetInstance<ReleaseViewModel>();
+                    break;
+                case ComponentViews.Releases:
+                    Display = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(view), view, null);
+            }
+        }
     }
 }

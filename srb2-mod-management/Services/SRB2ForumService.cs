@@ -54,6 +54,17 @@ namespace srb2_mod_management.Services
 
         public async Task UpdateRelease(Release release) => await _data.UpdateRelease(release);
 
+        public ReleaseInfo GetReleaseInfo(Mod mod, Category category)
+        {
+            var categoryKey = category.ToString().ToLower();
+            return _data.Pages.ContainsKey(categoryKey)
+                ? _data.Pages[categoryKey].Keys
+                    .Select(key => _data.Pages[categoryKey][key])
+                    .SelectMany(page => page.Releases)
+                    .FirstOrDefault(releaseinfo => releaseinfo.Id == mod.Id)
+                : null;
+        }
+
         //
 
         private static async Task<Page> GetPage(Category category, int page)

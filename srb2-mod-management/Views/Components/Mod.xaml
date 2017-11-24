@@ -10,9 +10,13 @@
         <ContextMenu DataContext="{Binding Source={StaticResource Locator}, Path=Home}">
             <MenuItem Header="Delete" Command="{Binding DeleteCommand}" />
             <MenuItem Header="Promote/Demote" Command="{Binding PromoteCommand}" />
+            <MenuItem Header="Open profile" Command="{Binding OpenProfileCommand}" />
         </ContextMenu>
     </UserControl.ContextMenu>
     <DockPanel HorizontalAlignment="Stretch" Margin="0,0,0,8">
+        <DockPanel.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding Source={StaticResource Locator}, Path=Home.OpenProfileCommand}"/>
+        </DockPanel.InputBindings>
         <Label DockPanel.Dock="Bottom"
                Content="{Binding ChangedThings, Converter={StaticResource ListConverter}}"
                Margin="4,-8"

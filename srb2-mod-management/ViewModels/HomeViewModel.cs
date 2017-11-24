@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
 using srb2_mod_management.Repositories.Interface;
+using srb2_mod_management.Services.Interface;
 
 namespace srb2_mod_management.ViewModels
 {
@@ -17,7 +18,9 @@ namespace srb2_mod_management.ViewModels
         private readonly ISettingsRepository _settings;
 
         private readonly IDownloadedModsRepository _downloadedMods;
-        
+
+        private readonly IModRetreiverService _modService;
+
         private string _gamePath;
 
         private ObservableCollection<Mod> _levels = new ObservableCollection<Mod>();
@@ -25,24 +28,32 @@ namespace srb2_mod_management.ViewModels
         private ObservableCollection<Mod> _characters = new ObservableCollection<Mod>();
 
         private ObservableCollection<Mod> _mods = new ObservableCollection<Mod>();
+        
+        private ObservableCollection<Mod> _scripts;
 
         private bool _starting;
 
         private int _index;
-        private bool _openGl;
-        private ObservableCollection<Mod> _scripts;
 
+        private bool _openGl;
+        
         // 
 
-        public HomeViewModel(ISettingsRepository settings, IDownloadedModsRepository downloadedMods)
+        public HomeViewModel(ISettingsRepository settings, IDownloadedModsRepository downloadedMods, IModRetreiverService modService)
         {
             _settings = settings;
             _downloadedMods = downloadedMods;
+            _modService = modService;
             OpenSettingsCommand = new RelayCommand(() => MessengerInstance.Send(Actions.ToggleSettings));
-            FindModsCommand = new RelayCommand(() => MessengerInstance.Send(Enums.Views.Discover));
+            FindModsCommand = new RelayCommand(() =>
+            {
+                MessengerInstance.Send(Enums.Views.Discover);
+                MessengerInstance.Send(ComponentViews.Categories);
+            });
             StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
             DeleteCommand = new RelayCommand(Delete);
             PromoteCommand = new RelayCommand(Promote);
+            OpenProfileCommand = new RelayCommand(OpenProfile);
             GamePath = _settings.GamePath;
             OpenGl = _settings.OpenGl;
 
@@ -63,6 +74,8 @@ namespace srb2_mod_management.ViewModels
         public RelayCommand DeleteCommand { get; set; }
 
         public RelayCommand PromoteCommand { get; set; }
+
+        public RelayCommand OpenProfileCommand { get; set; }
 
         public int Index
         {
@@ -201,6 +214,23 @@ namespace srb2_mod_management.ViewModels
             foreach (var mod in collection)
                 mod.Promoted ^= true;
             await _downloadedMods.Save();
+        }
+
+        private void OpenProfile()
+        {
+            var collection = Index == 3 ? SelectedMods : Index == 2 ? SelectedScripts : Index == 1 ? SelectedCharacters : SelectedLevels;
+            var category = Index == 3 ? Category.Mod : Index == 2 ? Category.Script : Index == 1 ? Category.Character : Category.Level;
+
+            var mod = collection.FirstOrDefault();
+            if (mod == null)
+                return;
+
+            var modinfo = _modService.GetReleaseInfo(mod, category);
+            if (modinfo == null)
+                return;
+
+            MessengerInstance.Send(Enums.Views.Discover);
+            MessengerInstance.Send((modinfo, category));
         }
     }
 }
