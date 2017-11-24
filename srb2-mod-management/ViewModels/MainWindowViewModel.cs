@@ -63,12 +63,15 @@ namespace srb2_mod_management.ViewModels
             switch (view)
             {
                 case Enums.Views.Home:
+                    // Remove selections
                     var vm = SimpleIoc.Default.GetInstance<HomeViewModel>();
                     vm.SelectedCharacters = new ObservableCollection<Mod>();
                     vm.SelectedMods = new ObservableCollection<Mod>();
                     vm.SelectedLevels = new ObservableCollection<Mod>();
+                    vm.SelectedScripts = new ObservableCollection<Mod>();
                     Display = vm;
                     break;
+
                 case Enums.Views.Discover:
                     Display = SimpleIoc.Default.GetInstance<DiscoverViewModel>();
                     break;

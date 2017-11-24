@@ -54,6 +54,15 @@ namespace srb2_mod_management.ViewModels
             DeleteCommand = new RelayCommand(Delete);
             PromoteCommand = new RelayCommand(Promote);
             OpenProfileCommand = new RelayCommand(OpenProfile);
+            DeselectCommand = new RelayCommand(() =>
+            {
+                DeselectRequest?.Invoke();
+                SelectedCharacters = new ObservableCollection<Mod>();
+                SelectedMods = new ObservableCollection<Mod>();
+                SelectedLevels = new ObservableCollection<Mod>();
+                SelectedScripts = new ObservableCollection<Mod>();
+                RaisePropertyChanged(nameof(SelectedItems));
+            });
             GamePath = _settings.GamePath;
             OpenGl = _settings.OpenGl;
 
@@ -76,6 +85,10 @@ namespace srb2_mod_management.ViewModels
         public RelayCommand PromoteCommand { get; set; }
 
         public RelayCommand OpenProfileCommand { get; set; }
+
+        public RelayCommand DeselectCommand { get; set; }
+
+        public Action DeselectRequest { get; set; }
 
         public int Index
         {

@@ -6,8 +6,9 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d"
              Name="Root"
+             DataContextChanged="Home_OnDataContextChanged"
              DataContext="{Binding Source={StaticResource Locator}, Path=Home}"
-             d:DesignHeight="300" d:DesignWidth="500">
+             d:DesignHeight="560" d:DesignWidth="965">
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="BorderThickness" Value="0" />
@@ -35,6 +36,7 @@
             <Button Content="Launch game" Command="{Binding StartCommand}" Margin="0,0,5,0" Background="Green" />
             <Button Command="{Binding FindModsCommand}" Content="Get more mods" />
             <Button Command="{Binding OpenSettingsCommand}" DockPanel.Dock="Right" Content="Settings" />
+            <Button Command="{Binding DeselectCommand}" Margin="0,0,5,0"  DockPanel.Dock="Right" Content="Deselect all" />
         </DockPanel>
         <Separator DockPanel.Dock="Bottom" Margin="0,5" />
         <DockPanel>

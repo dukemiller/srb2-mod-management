@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using srb2_mod_management.Models;
 using srb2_mod_management.ViewModels;
@@ -47,6 +48,19 @@ namespace srb2_mod_management.Views
             viewmodel.SelectedScripts = new ObservableCollection<Mod>(ScriptsListBox.SelectedItems
                 .Cast<Mod>());
             viewmodel.RaisePropertyChanged("SelectedItems");
+        }
+
+        private void Home_OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var viewmodel = (HomeViewModel) DataContext;
+
+            viewmodel.DeselectRequest = () =>
+            {
+                LevelsListBox.SelectedItems.Clear();
+                CharactersListBox.SelectedItems.Clear();
+                ModsListBox.SelectedItems.Clear();
+                ScriptsListBox.SelectedItems.Clear();
+            };
         }
     }
 }
