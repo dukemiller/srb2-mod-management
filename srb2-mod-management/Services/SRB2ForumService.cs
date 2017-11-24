@@ -257,9 +257,7 @@ namespace srb2_mod_management.Services
 
             var data = Pages[key][page];
 
-            if ((data.LastChecked - DateTime.Now).Days > 5) ;
-
-            else if (data.Releases.Count == 0)
+            if (data.Releases.Count == 0 || (DateTime.Now  - data.LastChecked).Days > 14)
             {
                 Pages[key][page] = await getPage();
                 Pages[key][page].LastChecked = DateTime.Now;
