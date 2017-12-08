@@ -202,7 +202,8 @@ namespace srb2_mod_management.Services
                 Released = released,
                 LastUpdated = updated,
                 Screenshots = screenshots,
-                ChangedThings = changedThings
+                ChangedThings = changedThings,
+                Retrieved = DateTime.Now
             };
         }
 
@@ -269,11 +270,21 @@ namespace srb2_mod_management.Services
 
         public async Task<Release> FindRelease(string url, Func<Task<Release>> getRelease)
         {
+
+            // No release, retrieve it
             if (!Releases.ContainsKey(url))
             {
                 Releases[url] = await getRelease();
                 await Save();
             }
+
+            // Potentially old, update it
+            if ((DateTime.Now - Releases[url].Retrieved).Days > 30)
+            {
+                Releases[url] = await getRelease();
+                await Save();
+            }
+
             return Releases[url];
         }
 

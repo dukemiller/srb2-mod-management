@@ -29,5 +29,8 @@ namespace srb2_mod_management.Models
 
         [JsonProperty("last_updated")]
         public DateTime LastUpdated { get; set; }
+
+        [JsonProperty("retrieved")]
+        public DateTime Retrieved { get; set; }
     }
 }
