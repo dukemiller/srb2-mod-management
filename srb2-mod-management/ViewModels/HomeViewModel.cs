@@ -37,7 +37,11 @@ namespace srb2_mod_management.ViewModels
         private int _index;
 
         private bool _openGl;
-        
+
+        private bool _noSound;
+
+        private bool _noMusic;
+
         // 
 
         public HomeViewModel(ISettingsRepository settings, IDownloadedModsRepository downloadedMods, IModRetreiverService modService)
@@ -45,6 +49,8 @@ namespace srb2_mod_management.ViewModels
             _settings = settings;
             _downloadedMods = downloadedMods;
             _modService = modService;
+
+            // Commands
             OpenSettingsCommand = new RelayCommand(() => MessengerInstance.Send(Actions.ToggleSettings));
             FindModsCommand = new RelayCommand(() =>
             {
@@ -64,9 +70,14 @@ namespace srb2_mod_management.ViewModels
                 SelectedScripts = new ObservableCollection<Mod>();
                 RaisePropertyChanged(nameof(SelectedItems));
             });
+
+            // Settings
             GamePath = _settings.GamePath;
             OpenGl = _settings.OpenGl;
+            NoMusic = _settings.NoMusic;
+            NoSound = _settings.NoSound;
 
+            // Lists
             Levels = _downloadedMods.Levels;
             Characters = _downloadedMods.Characters;
             Mods = _downloadedMods.Mods;
@@ -169,6 +180,28 @@ namespace srb2_mod_management.ViewModels
             }
         }
 
+        public bool NoSound
+        {
+            get => _noSound;
+            set
+            {
+                Set(() => NoSound, ref _noSound, value);
+                _settings.NoSound = value;
+                _settings.Save();
+            }
+        }
+
+        public bool NoMusic
+        {
+            get => _noMusic;
+            set
+            {
+                Set(() => NoMusic, ref _noMusic, value);
+                _settings.NoMusic = value;
+                _settings.Save();
+            }
+        }
+
         public string Version => "version " + string.Concat(Assembly.GetExecutingAssembly().GetName().Version.ToString().Reverse().Skip(2).Reverse());
 
         // 
@@ -188,6 +221,12 @@ namespace srb2_mod_management.ViewModels
 
             if (OpenGl)
                 arguments += " -opengl";
+
+            if (NoSound)
+                arguments += " -nosound";
+
+            if (NoMusic)
+                arguments += " -nomusic";
 
             var info = new ProcessStartInfo
             {

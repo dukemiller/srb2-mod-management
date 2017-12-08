@@ -24,6 +24,12 @@ namespace srb2_mod_management.Repositories
         [JsonProperty("opengl")]
         public bool OpenGl { get; set; } = true;
 
+        [JsonProperty("no_sound")]
+        public bool NoSound { get; set; }
+
+        [JsonProperty("no_music")]
+        public bool NoMusic { get; set; }
+
         [JsonProperty("game_path")]
         public string GamePath { get; set; } = "";
 

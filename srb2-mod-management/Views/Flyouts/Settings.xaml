@@ -17,9 +17,19 @@
                      VerticalAlignment="Center" FontSize="18" />
         </DockPanel>
         <Separator DockPanel.Dock="Top" Opacity="0" Margin="0,5"/>
+        
         <CheckBox Margin="5,0,0,0" IsChecked="{Binding OpenGl, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
             <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Use OpenGL (Recommended)</Label>
         </CheckBox>
+        
+        <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoMusic, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable music</Label>
+        </CheckBox>
+        
+        <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoSound, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable sound</Label>
+        </CheckBox>
+        
 
     </DockPanel>
 </UserControl>
