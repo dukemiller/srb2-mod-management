@@ -8,7 +8,7 @@ namespace srb2_mod_management.Models
     [Serializable]
     public class Mod: ObservableObject
     {
-        private bool _promoted;
+        private bool _highlighted;
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -22,11 +22,11 @@ namespace srb2_mod_management.Models
         [JsonProperty("changed_things")]
         public List<string> ChangedThings { get; set; } = new List<string>();
 
-        [JsonProperty("promoted")]
-        public bool Promoted
+        [JsonProperty("highlighted")]
+        public bool Highlighted
         {
-            get => _promoted;
-            set => Set(() => Promoted, ref _promoted, value);
+            get => _highlighted;
+            set => Set(() => Highlighted, ref _highlighted, value);
         }
     }
 }

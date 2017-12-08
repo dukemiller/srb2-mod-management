@@ -58,4 +58,17 @@ namespace srb2_mod_management.Classes
             throw new NotImplementedException();
         }
     }
+
+    public class HighlightConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return System.Convert.ToBoolean(value) ? "Remove Highlight" : "Add Highlight";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

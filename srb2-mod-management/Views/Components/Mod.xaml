@@ -5,12 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:models="clr-namespace:srb2_mod_management.Models"
              mc:Ignorable="d"
+             x:Name="ModRoot"
              d:DesignWidth="300" d:DataContext="{d:DesignInstance {x:Type models:Mod}}">
     <UserControl.ContextMenu>
-        <ContextMenu DataContext="{Binding Source={StaticResource Locator}, Path=Home}">
-            <MenuItem Header="Delete" Command="{Binding DeleteCommand}" />
-            <MenuItem Header="Promote/Demote" Command="{Binding PromoteCommand}" />
-            <MenuItem Header="Open profile" Command="{Binding OpenProfileCommand}" />
+        <ContextMenu>
+            <MenuItem Header="Delete" 
+                      Command="{Binding Source={StaticResource Locator}, Path=Home.DeleteCommand}" />
+            <MenuItem Header="{Binding Highlighted, Converter={StaticResource HighlightConverter}}" 
+                      Command="{Binding Source={StaticResource Locator}, Path=Home.HighlightCommand}" />
+            <MenuItem Header="Open profile" 
+                      Command="{Binding Source={StaticResource Locator}, Path=Home.OpenProfileCommand}" />
         </ContextMenu>
     </UserControl.ContextMenu>
     <DockPanel HorizontalAlignment="Stretch" Margin="0,0,0,8">

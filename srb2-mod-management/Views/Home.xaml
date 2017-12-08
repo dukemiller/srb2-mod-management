@@ -25,7 +25,7 @@
         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="{x:Type ListBoxItem}">
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Promoted}" Value="True">
+                <DataTrigger Binding="{Binding Highlighted}" Value="True">
                     <Setter Property="Background" Value="#3D3B3B" />
                 </DataTrigger>
             </Style.Triggers>

@@ -53,7 +53,7 @@ namespace srb2_mod_management.ViewModels
             });
             StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
             DeleteCommand = new RelayCommand(Delete);
-            PromoteCommand = new RelayCommand(Promote);
+            HighlightCommand = new RelayCommand(Highlight);
             OpenProfileCommand = new RelayCommand(OpenProfile);
             DeselectCommand = new RelayCommand(() =>
             {
@@ -83,7 +83,7 @@ namespace srb2_mod_management.ViewModels
 
         public RelayCommand DeleteCommand { get; set; }
 
-        public RelayCommand PromoteCommand { get; set; }
+        public RelayCommand HighlightCommand { get; set; }
 
         public RelayCommand OpenProfileCommand { get; set; }
 
@@ -224,11 +224,12 @@ namespace srb2_mod_management.ViewModels
             RaisePropertyChanged(nameof(SelectedItems));
         }
 
-        private async void Promote()
+        private async void Highlight()
         {
             var collection = Index == 3 ? SelectedMods : Index == 2 ? SelectedScripts : Index == 1 ? SelectedCharacters : SelectedLevels;
+            await Task.Delay(100);
             foreach (var mod in collection)
-                mod.Promoted ^= true;
+                mod.Highlighted ^= true;
             await _downloadedMods.Save();
         }
 
