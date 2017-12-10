@@ -15,7 +15,7 @@
                       DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
                       dialogs:DialogParticipation.Register="{Binding}"
                       Loaded="MainWindow_OnLoaded"
-                      Title="SRB2 Mod Management" Height="560" Width="965">
+                      Title="SRB2 Mod Manager" Height="560" Width="965">
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl>
             <controls:Flyout AreAnimationsEnabled="True"

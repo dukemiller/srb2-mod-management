@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:components="clr-namespace:srb2_mod_management.ViewModels.Components"
+             xmlns:componentsVm="clr-namespace:srb2_mod_management.ViewModels.Components"
+             xmlns:components="clr-namespace:srb2_mod_management.Views.Components"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
              mc:Ignorable="d"
              Background="{StaticResource WindowBackgroundBrush}"
-             d:DataContext="{d:DesignInstance components:ReleaseViewModel}"
+             d:DataContext="{d:DesignInstance componentsVm:ReleaseViewModel}"
              d:DesignHeight="560" d:DesignWidth="965">
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
@@ -23,13 +24,13 @@
     </UserControl.Resources>
     <DockPanel>
         <Grid DockPanel.Dock="Bottom">
-            <Button Command="{Binding DownloadCommand}" 
+            <Button Command="{Binding DownloadCommand}"
                     Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityConverter}}"
-                    Content="{Binding DownloadText}"/>
-            <Label FontSize="18" 
+                    Content="{Binding DownloadText}" />
+            <Label FontSize="18"
                    VerticalAlignment="Center"
                    Opacity="0.4"
-                   Content="{Binding Status}" 
+                   Content="{Binding Status}"
                    Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityReverseConverter}}" />
         </Grid>
         <Grid DockPanel.Dock="Top">
@@ -40,7 +41,8 @@
             <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="26"
                        Text="{Binding Release.Name}" />
             <DockPanel Grid.Column="1" LastChildFill="False">
-                <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding WebpageCommand}" ToolTip="Open the mod's forum post">
+                <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding WebpageCommand}"
+                        ToolTip="Open the mod's forum post">
                     <iconPacks:PackIconModern Kind="Page" Width="25" Height="25" />
                 </Button>
             </DockPanel>
@@ -73,6 +75,10 @@
                     </DockPanel>
                     <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
+            </controls:MetroTabItem>
+            <controls:MetroTabItem Header="Files"
+                                   Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityReverseConverter}}">
+                <components:Files DataContext="{Binding Mod}" />
             </controls:MetroTabItem>
         </controls:MetroAnimatedSingleRowTabControl>
     </DockPanel>

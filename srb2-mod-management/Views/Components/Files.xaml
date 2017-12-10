@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="srb2_mod_management.Views.Components.Files"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:srb2_mod_management.Views.Components"
+             xmlns:models="clr-namespace:srb2_mod_management.Models"
+             Background="{StaticResource WindowBackgroundBrush}"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance models:Mod}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel Margin="8">
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+            All files that will be added when launching the game with this mod selected.
+            Generally you shouldn't have to mess with this, but in the case of language
+            packs / the author adding every versioned file into source / etc,
+            alter that selection here.
+        </TextBlock>
+        <Separator DockPanel.Dock="Top" Margin="5,10" Opacity="0.4" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Files}" Focusable="False">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <CheckBox IsTabStop="False" VerticalAlignment="Center" FontSize="24"
+                                      IsChecked="{Binding Disabled, Converter={StaticResource ReverseBoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Label VerticalAlignment="Center" Margin="0,-2,0,0" Content="{Binding Name}" />
+                            </CheckBox>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

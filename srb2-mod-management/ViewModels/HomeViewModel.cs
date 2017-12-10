@@ -213,7 +213,8 @@ namespace srb2_mod_management.ViewModels
             var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
             var command = string.Join(" ",
                 mods.SelectMany(mod => mod.Files)
-                    .Where(file => new[] {".wad", ".lua"}.Any(ext => file.ToLower().EndsWith(ext)))
+                    .Where(file => !file.Disabled && file.IsModFile)
+                    .Select(file => file.Path)
                     .Distinct()
             );
 
@@ -255,7 +256,7 @@ namespace srb2_mod_management.ViewModels
             foreach (var mod in collection.ToList())
             {
                 foreach(var file in mod.Files)
-                    File.Delete(file);
+                    File.Delete(file.Path);
                 await _downloadedMods.Remove(category, mod);
                 collection.Remove(mod);
             }

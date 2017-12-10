@@ -111,6 +111,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Components\Files.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Components\Mod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,6 +159,7 @@
     <Compile Include="Enums\Views.cs" />
     <Compile Include="Models\DiscoverModel.cs" />
     <Compile Include="Models\DownloadLink.cs" />
+    <Compile Include="Models\ModFile.cs" />
     <Compile Include="Models\Mod.cs" />
     <Compile Include="Models\Star.cs" />
     <Compile Include="Repositories\DownloadedModsRepository.cs" />
@@ -172,6 +177,9 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\Components\Categories.xaml.cs">
       <DependentUpon>Categories.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Components\Files.xaml.cs">
+      <DependentUpon>Files.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Components\Mod.xaml.cs">
       <DependentUpon>Mod.xaml</DependentUpon>

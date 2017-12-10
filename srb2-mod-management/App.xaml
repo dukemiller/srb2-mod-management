@@ -28,6 +28,7 @@
             <classes:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
             <classes:BoolVisibilityReverseConverter x:Key="BoolVisibilityReverseConverter" />
             <classes:HighlightConverter x:Key="HighlightConverter" />
+            <classes:ReverseBoolConverter x:Key="ReverseBoolConverter" />
 
             <Storyboard x:Key="FadeTransition">
                 <DoubleAnimation Duration="0:0:0.35"

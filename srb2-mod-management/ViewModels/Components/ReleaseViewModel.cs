@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace srb2_mod_management.ViewModels.Components
         private bool _downloading;
         private bool _notDownloaded;
         private string _status;
+        private Mod _mod;
 
         // 
 
@@ -53,12 +55,23 @@ namespace srb2_mod_management.ViewModels.Components
                 () => !_downloadedMods.AlreadyContains(_model.Category, Release)
                       && !Downloading);
             NotDownloaded = !_downloadedMods.AlreadyContains(_model.Category, Release);
+            if (!NotDownloaded)
+            {
+                Mod = _downloadedMods.Find(model.Category, model.ReleaseInfo);
+                foreach (var file in Mod.Files)
+                {
+                    file.PropertyChanged -= FileOnPropertyChanged;
+                    file.PropertyChanged += FileOnPropertyChanged;
+                }
+            }
             Status = "Available to use.";
             Index = 0;
             Image = "";
             return this;
         }
-        
+
+        private async void FileOnPropertyChanged(object sender, PropertyChangedEventArgs args) => await _downloadedMods.Save();
+
         public async Task VisibleChanged(bool visible)
         {
             if (visible)
@@ -116,6 +129,12 @@ namespace srb2_mod_management.ViewModels.Components
         {
             get => _status;
             set => Set(() => Status, ref _status, value);
+        }
+
+        public Mod Mod
+        {
+            get => _mod;
+            set => Set(() => Mod, ref _mod, value);
         }
 
         public RelayCommand DownloadCommand { get; set; }
@@ -258,13 +277,17 @@ namespace srb2_mod_management.ViewModels.Components
                 .Aggregate(Release.Name, (current, thing) => current.Replace($"({thing})", ""))
                 .Trim();
 
-            await _downloadedMods.Add(_model.Category, new Mod
+            var mod = new Mod
             {
                 Id = Release.Id,
                 Name = name,
-                Files = extractedFiles.Select(file => Path.Combine(path, file)).ToList(),
+                Files = extractedFiles.Select(file => new ModFile { Path = Path.Combine(path, file) }).ToList(),
                 ChangedThings = Release.ChangedThings
-            });
+            };
+
+            await _downloadedMods.Add(_model.Category, mod);
+
+            Mod = mod;
 
             // Notify
 

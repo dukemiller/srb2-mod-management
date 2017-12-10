@@ -47,6 +47,8 @@ namespace srb2_mod_management.Repositories
             await Save();
         }
 
+        public Mod Find(Category category, ReleaseInfo info) => GetCollectionForCategory(category).FirstOrDefault(mod => info.Id == mod.Id);
+
         private ObservableCollection<Mod> GetCollectionForCategory(Category category)
         {
             switch (category)

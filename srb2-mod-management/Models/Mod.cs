@@ -10,6 +10,10 @@ namespace srb2_mod_management.Models
     {
         private bool _highlighted;
 
+        private List<ModFile> _files = new List<ModFile>();
+
+        // 
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -17,12 +21,16 @@ namespace srb2_mod_management.Models
         public int Id { get; set; }
 
         [JsonProperty("files")]
-        public List<string> Files { get; set; } = new List<string>();
+        public List<ModFile> Files
+        {
+            get => _files;
+            set => Set(() => Files, ref _files, value);
+        }
 
         [JsonProperty("changed_things")]
         public List<string> ChangedThings { get; set; } = new List<string>();
 
-        [JsonProperty("highlighted")]
+        [JsonProperty("highlighted", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool Highlighted
         {
             get => _highlighted;
