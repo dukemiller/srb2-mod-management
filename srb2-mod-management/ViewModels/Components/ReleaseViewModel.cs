@@ -253,7 +253,7 @@ namespace srb2_mod_management.ViewModels.Components
 
                 else
                 {
-                    if (new[] {".zip", ".rar"}.Any(ext => filepath.EndsWith(ext))
+                    if (new[] {".zip", ".rar", ".7z"}.Any(ext => filepath.EndsWith(ext))
                         && !Regex.Match(filepath, @"(part[_ +-.]?(?:0?[2-9]|1\d])|7z.\d?\d[1-9])",
                             RegexOptions.IgnoreCase).Success)
                     {
