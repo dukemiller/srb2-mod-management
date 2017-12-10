@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 
@@ -26,6 +27,9 @@ namespace srb2_mod_management.Models
             get => _files;
             set => Set(() => Files, ref _files, value);
         }
+
+        [JsonIgnore]
+        public List<ModFile> ModFiles => Files.Where(file => file.IsModFile).ToList();
 
         [JsonProperty("changed_things")]
         public List<string> ChangedThings { get; set; } = new List<string>();

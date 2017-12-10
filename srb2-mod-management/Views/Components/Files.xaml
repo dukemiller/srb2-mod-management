@@ -18,7 +18,7 @@
         </TextBlock>
         <Separator DockPanel.Dock="Top" Margin="5,10" Opacity="0.4" />
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Files}" Focusable="False">
+            <ItemsControl ItemsSource="{Binding ModFiles}" Focusable="False">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
