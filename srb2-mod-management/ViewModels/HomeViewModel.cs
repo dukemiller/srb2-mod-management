@@ -21,8 +21,7 @@ namespace srb2_mod_management.ViewModels
         private readonly IDownloadedModsRepository _downloadedMods;
 
         private readonly IModRetreiverService _modService;
-
-
+        
         private ObservableCollection<Mod> _levels = new ObservableCollection<Mod>();
 
         private ObservableCollection<Mod> _characters = new ObservableCollection<Mod>();
@@ -36,8 +35,7 @@ namespace srb2_mod_management.ViewModels
         private int _index;
 
         private GameOptions _options;
-
-
+        
         // 
 
         public HomeViewModel(ISettingsRepository settings, IDownloadedModsRepository downloadedMods, IModRetreiverService modService)
@@ -68,17 +66,13 @@ namespace srb2_mod_management.ViewModels
             });
 
             Options = _settings.Options;
-
             Options.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == "GamePath")
                     StartCommand.RaiseCanExecuteChanged();
                 _settings.Save();
             };
-
-            // Settings
             
-
             // Lists
             Levels = _downloadedMods.Levels;
             Characters = _downloadedMods.Characters;

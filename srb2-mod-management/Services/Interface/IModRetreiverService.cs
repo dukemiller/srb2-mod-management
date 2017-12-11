@@ -17,9 +17,11 @@ namespace srb2_mod_management.Services.Interface
         Task<Release> RetrieveRelease(ReleaseInfo release);
 
         /// <summary>
-        ///     Update the release via it's source.
+        ///     Replace the release.
         /// </summary>
-        Task UpdateRelease(Release release);
+        Task ReplaceRelease(Release release);
+
+        Task UpdateRelease(ReleaseInfo release);
 
         /// <summary>
         ///     Retrieve the matching release info for a given mod in a cateogry.

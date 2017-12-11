@@ -20,7 +20,9 @@ namespace srb2_mod_management.Services
     public class Srb2ForumService : IModRetreiverService
     {
         private readonly IDownloadedModsRepository _modsRepository;
+
         private static readonly HttpClient Client = new HttpClient();
+
         private readonly ForumData _data;
 
         // 
@@ -52,7 +54,9 @@ namespace srb2_mod_management.Services
             return await _data.FindRelease(release.Url, () => GetRelease(release.Url));
         }
 
-        public async Task UpdateRelease(Release release) => await _data.UpdateRelease(release);
+        public async Task ReplaceRelease(Release release) => await _data.ReplaceRelease(release);
+
+        public async Task UpdateRelease(ReleaseInfo release) => await _data.UpdateRelease(release, () => GetRelease(release.Url));
 
         public ReleaseInfo GetReleaseInfo(Mod mod, Category category)
         {
@@ -270,7 +274,6 @@ namespace srb2_mod_management.Services
 
         public async Task<Release> FindRelease(string url, Func<Task<Release>> getRelease)
         {
-
             // No release, retrieve it
             if (!Releases.ContainsKey(url))
             {
@@ -278,21 +281,25 @@ namespace srb2_mod_management.Services
                 await Save();
             }
 
-            // Potentially old, update it
-            if ((DateTime.Now - Releases[url].Retrieved).Days > 30)
-            {
-                Releases[url] = await getRelease();
-                await Save();
-            }
 
             return Releases[url];
         }
 
-        public async Task UpdateRelease(Release release)
+        public async Task ReplaceRelease(Release release)
         {
             var key = Releases.Keys.First(releaseUrl => releaseUrl.Contains(release.Id.ToString()));
             Releases[key] = release;
             await Save();
+        }
+
+        public async Task UpdateRelease(ReleaseInfo release, Func<Task<Release>> getRelease)
+        {
+            // Potentially old, update it
+            if ((DateTime.Now - Releases[release.Url].Retrieved).Days > 30)
+            {
+                Releases[release.Url] = await getRelease();
+                await Save();
+            }
         }
 
         public async Task Save()

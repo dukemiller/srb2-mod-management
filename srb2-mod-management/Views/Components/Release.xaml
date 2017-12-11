@@ -45,6 +45,10 @@
                         ToolTip="Open the mod's forum post">
                     <iconPacks:PackIconModern Kind="Page" Width="25" Height="25" />
                 </Button>
+                <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding RefreshCommand}"
+                        ToolTip="Attempt to update the information for the mod">
+                    <iconPacks:PackIconModern Kind="Refresh" Width="25" Height="25" />
+                </Button>
             </DockPanel>
         </Grid>
         <TextBlock FontStyle="Italic" DockPanel.Dock="Top" TextWrapping="Wrap"

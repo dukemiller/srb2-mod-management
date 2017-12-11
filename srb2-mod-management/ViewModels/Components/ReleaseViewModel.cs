@@ -54,6 +54,7 @@ namespace srb2_mod_management.ViewModels.Components
             DownloadCommand = new RelayCommand(Download,
                 () => !_downloadedMods.AlreadyContains(_model.Category, Release)
                       && !Downloading);
+            RefreshCommand = new RelayCommand(() => _modService.UpdateRelease(_model.ReleaseInfo));
             NotDownloaded = !_downloadedMods.AlreadyContains(_model.Category, Release);
             if (!NotDownloaded)
             {
@@ -137,6 +138,8 @@ namespace srb2_mod_management.ViewModels.Components
             set => Set(() => Mod, ref _mod, value);
         }
 
+        public RelayCommand RefreshCommand { get; set; }
+
         public RelayCommand DownloadCommand { get; set; }
 
         public RelayCommand WebpageCommand { get; set; }
@@ -203,7 +206,7 @@ namespace srb2_mod_management.ViewModels.Components
                     if (!File.Exists(downloadPath))
                         await Downloader.DownloadFileTaskAsync(image, downloadPath);
                     Release.Screenshots[index] = downloadPath;
-                    await _modService.UpdateRelease(Release);
+                    await _modService.ReplaceRelease(Release);
                 }
 
                 catch
