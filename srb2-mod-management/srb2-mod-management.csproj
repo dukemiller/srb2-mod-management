@@ -159,6 +159,7 @@
     <Compile Include="Enums\Views.cs" />
     <Compile Include="Models\DiscoverModel.cs" />
     <Compile Include="Models\DownloadLink.cs" />
+    <Compile Include="Models\GameOptions.cs" />
     <Compile Include="Models\ModFile.cs" />
     <Compile Include="Models\Mod.cs" />
     <Compile Include="Models\Star.cs" />

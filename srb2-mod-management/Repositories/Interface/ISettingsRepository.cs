@@ -1,31 +1,13 @@
-﻿namespace srb2_mod_management.Repositories.Interface
+﻿using srb2_mod_management.Models;
+
+namespace srb2_mod_management.Repositories.Interface
 {
     public interface ISettingsRepository
     {
         /// <summary>
-        ///     Path to the game folder.
+        ///     The game launch options.
         /// </summary>
-        string GamePath { get; set; }
-
-        /// <summary>
-        ///     Path to the SRB2Win executable.
-        /// </summary>
-        string GameExe { get; }
-
-        /// <summary>
-        ///     Flag for determining if OpenGL should be enabled.
-        /// </summary>
-        bool OpenGl { get; set; }
-
-        /// <summary>
-        ///     Disable sound.
-        /// </summary>
-        bool NoSound { get; set; }
-
-        /// <summary>
-        ///     Disable music.
-        /// </summary>
-        bool NoMusic { get; set; }
+        GameOptions Options { get; set; }
 
         /// <summary>
         ///     Save the repository to disk.

@@ -9,19 +9,37 @@
              TextElement.FontSize="22"
              d:DesignHeight="400"
              Width="400">
-    <DockPanel LastChildFill="False">
+    <DockPanel LastChildFill="False" DataContext="{Binding Options}">
         <Label DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.4" Content="{Binding Version}"/>
         <DockPanel DockPanel.Dock="Top">
             <Label VerticalAlignment="Center">SRB2 path:</Label>
-            <TextBox Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"
+            <TextBox Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged, Delay=800}" Margin="5,0"
                      VerticalAlignment="Center" FontSize="18" />
         </DockPanel>
         <Separator DockPanel.Dock="Top" Opacity="0" Margin="0,5"/>
-        
+
+        <Label DockPanel.Dock="Top" Content="General" FontWeight="DemiBold"/>
+
+        <CheckBox Margin="5,0,0,0" IsChecked="{Binding SkipIntro, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Skip intro on startup</Label>
+        </CheckBox>
+
+        <CheckBox Margin="5,0,0,0" IsChecked="{Binding UltimateMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Ultimate mode</Label>
+        </CheckBox>
+
+        <Label DockPanel.Dock="Top" Content="Video" FontWeight="DemiBold"/>
+
         <CheckBox Margin="5,0,0,0" IsChecked="{Binding OpenGl, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
             <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Use OpenGL (Recommended)</Label>
         </CheckBox>
-        
+
+        <CheckBox Margin="5,0,0,0" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Windowed</Label>
+        </CheckBox>
+
+        <Label DockPanel.Dock="Top" Content="Audio" FontWeight="DemiBold"/>
+
         <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoMusic, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
             <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable music</Label>
         </CheckBox>

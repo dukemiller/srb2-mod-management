@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using srb2_mod_management.Models;
 using srb2_mod_management.Repositories.Interface;
 
 namespace srb2_mod_management.Repositories
@@ -15,25 +16,16 @@ namespace srb2_mod_management.Repositories
                 .GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "srb2_mod_management");
 
+        /// <summary>
+        ///     The path to the main settings file.
+        /// </summary>
         [JsonIgnore]
         public static string SettingsPath => Path.Combine(ApplicationDirectory, "settings.json");
 
-        [JsonIgnore]
-        public string GameExe => Path.Combine(GamePath, "srb2win.exe");
+        [JsonProperty("options")]
+        public GameOptions Options { get; set; } = new GameOptions();
 
-        [JsonProperty("opengl")]
-        public bool OpenGl { get; set; } = true;
-
-        [JsonProperty("no_sound")]
-        public bool NoSound { get; set; }
-
-        [JsonProperty("no_music")]
-        public bool NoMusic { get; set; }
-
-        [JsonProperty("game_path")]
-        public string GamePath { get; set; } = "";
-
-        public bool PathValid() => File.Exists(GameExe);
+        public bool PathValid() => File.Exists(Options.GameExe);
 
         public void Save()
         {

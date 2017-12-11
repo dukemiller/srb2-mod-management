@@ -22,7 +22,6 @@ namespace srb2_mod_management.ViewModels
 
         private readonly IModRetreiverService _modService;
 
-        private string _gamePath;
 
         private ObservableCollection<Mod> _levels = new ObservableCollection<Mod>();
 
@@ -36,11 +35,8 @@ namespace srb2_mod_management.ViewModels
 
         private int _index;
 
-        private bool _openGl;
+        private GameOptions _options;
 
-        private bool _noSound;
-
-        private bool _noMusic;
 
         // 
 
@@ -71,11 +67,17 @@ namespace srb2_mod_management.ViewModels
                 RaisePropertyChanged(nameof(SelectedItems));
             });
 
+            Options = _settings.Options;
+
+            Options.PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "GamePath")
+                    StartCommand.RaiseCanExecuteChanged();
+                _settings.Save();
+            };
+
             // Settings
-            GamePath = _settings.GamePath;
-            OpenGl = _settings.OpenGl;
-            NoMusic = _settings.NoMusic;
-            NoSound = _settings.NoSound;
+            
 
             // Lists
             Levels = _downloadedMods.Levels;
@@ -150,90 +152,31 @@ namespace srb2_mod_management.ViewModels
 
         public ObservableCollection<Mod> SelectedScripts { get; set; } = new ObservableCollection<Mod>();
 
+        public GameOptions Options
+        {
+            get => _options;
+            set => Set(() => Options, ref _options, value);
+        }
+
         public int SelectedItems => SelectedLevels.Count + SelectedCharacters.Count + SelectedMods.Count + SelectedScripts.Count;
 
         public int TotalItems => Levels.Count + Characters.Count + Mods.Count + Scripts.Count;
 
-        public string GamePath
-        {
-            get => _gamePath;
-            set
-            {
-                Set(() => GamePath, ref _gamePath, value);
-                if (value != null && value.Length > 1 && Directory.Exists(GamePath))
-                {
-                    _settings.GamePath = value;
-                    _settings.Save();
-                    StartCommand.RaiseCanExecuteChanged();
-                }
-            }
-        }
-
-        public bool OpenGl
-        {
-            get => _openGl;
-            set
-            {
-                Set(() => OpenGl, ref _openGl, value);
-                _settings.OpenGl = value;
-                _settings.Save();
-            }
-        }
-
-        public bool NoSound
-        {
-            get => _noSound;
-            set
-            {
-                Set(() => NoSound, ref _noSound, value);
-                _settings.NoSound = value;
-                _settings.Save();
-            }
-        }
-
-        public bool NoMusic
-        {
-            get => _noMusic;
-            set
-            {
-                Set(() => NoMusic, ref _noMusic, value);
-                _settings.NoMusic = value;
-                _settings.Save();
-            }
-        }
-
         public string Version => "version " + string.Concat(Assembly.GetExecutingAssembly().GetName().Version.ToString().Reverse().Skip(2).Reverse());
 
         // 
-
+        
         private async void Start()
         {
             Starting = true;
 
             var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
-            var command = string.Join(" ",
-                mods.SelectMany(mod => mod.Files)
-                    .Where(file => !file.Disabled && file.IsModFile)
-                    .Select(file => file.Path)
-                    .Distinct()
-            );
-
-            var arguments = $"-file {command}";
-
-            if (OpenGl)
-                arguments += " -opengl";
-
-            if (NoSound)
-                arguments += " -nosound";
-
-            if (NoMusic)
-                arguments += " -nomusic";
 
             var info = new ProcessStartInfo
             {
-                WorkingDirectory = _settings.GamePath,
-                FileName = _settings.GameExe,
-                Arguments = arguments,
+                WorkingDirectory = Options.GamePath,
+                FileName = Options.GameExe,
+                Arguments = Options.BuildArguments(mods),
                 CreateNoWindow = true
             };
 
