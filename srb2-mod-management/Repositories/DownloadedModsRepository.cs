@@ -49,6 +49,8 @@ namespace srb2_mod_management.Repositories
 
         public Mod Find(Category category, ReleaseInfo info) => GetCollectionForCategory(category).FirstOrDefault(mod => info.Id == mod.Id);
 
+        public Mod Find(int id) => Levels.Concat(Characters).Concat(Mods).Concat(Scripts).FirstOrDefault(mod => mod.Id == id);
+
         private ObservableCollection<Mod> GetCollectionForCategory(Category category)
         {
             switch (category)

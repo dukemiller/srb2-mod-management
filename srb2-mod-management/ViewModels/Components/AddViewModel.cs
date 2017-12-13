@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using srb2_mod_management.Enums;
@@ -32,22 +33,34 @@ namespace srb2_mod_management.ViewModels.Components
             AddCommand = new RelayCommand(Add, CanAdd);
             DeleteCommand = new RelayCommand(Delete);
             CancelCommand = new RelayCommand(() => MessengerInstance.Send(Actions.GoBack));
-
-            SetDefault();
         }
 
         private void ModOnPropertyChanged(object sender, PropertyChangedEventArgs args) => AddCommand.RaiseCanExecuteChanged();
 
         private void FilesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args) => AddCommand.RaiseCanExecuteChanged();
 
-        public void SetDefault()
+        public async void SetDefaultValues()
         {
-            Mod = new Mod { Id = 1, IsUserAdded = true};
+            var id = 100_000;
+
+            // Find an unused id
+
+            await Task.Run(() =>
+            {
+                while (_modsRepository.Find(id) != null)
+                    id++;
+            });
+
+            // Set default values
+            SelectedCategory = Category.Level;
+            ChangedThings = "";
+            Mod = new Mod {Id = id, IsUserAdded = true};
+
+            // Set event listeners for notifying change
             Mod.PropertyChanged -= ModOnPropertyChanged;
             Mod.PropertyChanged += ModOnPropertyChanged;
             Mod.Files.CollectionChanged -= FilesOnCollectionChanged;
             Mod.Files.CollectionChanged += FilesOnCollectionChanged;
-            SelectedCategory = Category.Level;
         }
         
         // 
