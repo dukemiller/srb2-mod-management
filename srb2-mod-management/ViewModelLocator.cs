@@ -31,6 +31,7 @@ namespace srb2_mod_management
             SimpleIoc.Default.Register<CategoriesViewModel>();
             SimpleIoc.Default.Register<ReleasesViewModel>();
             SimpleIoc.Default.Register<ReleaseViewModel>();
+            SimpleIoc.Default.Register<AddViewModel>();
         }
 
         public static MainWindowViewModel Main => ServiceLocator.Current.GetInstance<MainWindowViewModel>();

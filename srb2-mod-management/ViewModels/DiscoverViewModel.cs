@@ -125,6 +125,9 @@ namespace srb2_mod_management.ViewModels
                 case ComponentViews.Releases:
                     Display = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
                     break;
+                case ComponentViews.Add:
+                    Display = SimpleIoc.Default.GetInstance<AddViewModel>();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(view), view, null);
             }

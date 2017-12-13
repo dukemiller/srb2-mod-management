@@ -4,6 +4,7 @@
     {
         Categories,
         Release,
-        Releases
+        Releases,
+        Add
     }
 }

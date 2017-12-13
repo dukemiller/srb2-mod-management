@@ -51,6 +51,11 @@ namespace srb2_mod_management.ViewModels
                 MessengerInstance.Send(Enums.Views.Discover);
                 MessengerInstance.Send(ComponentViews.Categories);
             });
+            AddModsCommand = new RelayCommand(() =>
+            {
+                MessengerInstance.Send(Enums.Views.Discover);
+                MessengerInstance.Send(ComponentViews.Add);
+            });
             StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
             DeleteCommand = new RelayCommand(Delete);
             HighlightCommand = new RelayCommand(Highlight);
@@ -83,6 +88,8 @@ namespace srb2_mod_management.ViewModels
         // 
 
         public RelayCommand OpenSettingsCommand { get; set; }
+
+        public RelayCommand AddModsCommand { get; set; }
 
         public RelayCommand FindModsCommand { get; set; }
 
@@ -164,22 +171,25 @@ namespace srb2_mod_management.ViewModels
         {
             Starting = true;
 
-            var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
-
-            var info = new ProcessStartInfo
+            await Task.Run(() =>
             {
-                WorkingDirectory = Options.GamePath,
-                FileName = Options.GameExe,
-                Arguments = Options.BuildArguments(mods),
-                CreateNoWindow = true
-            };
+                var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
 
-            var process = new Process
-            {
-                StartInfo = info
-            };
+                var info = new ProcessStartInfo
+                {
+                    WorkingDirectory = Options.GamePath,
+                    FileName = Options.GameExe,
+                    Arguments = Options.BuildArguments(mods),
+                    CreateNoWindow = true
+                };
 
-            process.Start();
+                var process = new Process
+                {
+                    StartInfo = info
+                };
+
+                process.Start();
+            });
 
             await Task.Delay(3000);
 
@@ -192,8 +202,9 @@ namespace srb2_mod_management.ViewModels
             var category = Index == 3 ? Category.Mod : Index == 2 ? Category.Script : Index == 1 ? Category.Character : Category.Level;
             foreach (var mod in collection.ToList())
             {
-                foreach(var file in mod.Files)
-                    File.Delete(file.Path);
+                if (!mod.IsUserAdded)
+                    foreach(var file in mod.Files)
+                        File.Delete(file.Path);
                 await _downloadedMods.Remove(category, mod);
                 collection.Remove(mod);
             }

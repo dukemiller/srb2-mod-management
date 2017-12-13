@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="srb2_mod_management.Views.Components.Add"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:srb2_mod_management.Views.Components"
+             xmlns:components="clr-namespace:srb2_mod_management.ViewModels.Components"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d"
+             TextElement.FontSize="22"
+             Name="AddRoot"
+             d:DataContext="{d:DesignInstance components:AddViewModel}"
+             d:DesignHeight="560" d:DesignWidth="965">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+            <Button Content="Cancel" FontSize="16" BorderThickness="0" Focusable="False"
+                    Command="{Binding CancelCommand}" />
+            <Button Width="300" DockPanel.Dock="Right" FontSize="16" BorderThickness="0" Focusable="False"
+                    Content="Add"
+                    Command="{Binding AddCommand}" />
+        </DockPanel>
+
+        <Label DockPanel.Dock="Top" FontWeight="Black" FontSize="28" Content="Manually adding a local entry"
+               Margin="0,0,0,10" />
+
+        <DockPanel DockPanel.Dock="Top">
+            <UniformGrid Rows="3">
+                <Label Content="Name: " VerticalAlignment="Center" Margin="0,3" />
+                <Label Content="Category: " VerticalAlignment="Center" />
+                <Label Content="Changed: " VerticalAlignment="Center" />
+            </UniformGrid>
+            <UniformGrid Rows="3">
+                <TextBox FontSize="22" VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
+                         Text="{Binding Mod.Name, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox FontSize="22" VerticalContentAlignment="Center"
+                          ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}"
+                          VerticalAlignment="Center"
+                          IsSynchronizedWithCurrentItem="True"
+                          SelectedItem="{Binding SelectedCategory, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox FontSize="22" VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
+                         controls:TextBoxHelper.Watermark="e.g. 'Single Player Levels, SOCs'"
+                         Text="{Binding ChangedThings, UpdateSourceTrigger=PropertyChanged}" />
+            </UniformGrid>
+        </DockPanel>
+
+        <DockPanel DockPanel.Dock="Top">
+            <Button DockPanel.Dock="Right" Width="50" BorderThickness="0"
+                    FontWeight="Black"
+                    Focusable="False"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Margin="0"
+                    Padding="0"
+                    Command="{Binding OpenFileBrowserCommand}">
+                <Button.Content>
+                    <TextBlock FontSize="28"
+                               Text="+" />
+                </Button.Content>
+            </Button>
+            <Label Content="Files: " VerticalAlignment="Center" />
+        </DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,5">
+            <ListBox ItemsSource="{Binding Mod.Files}"
+                     SelectedItem="{Binding SelectedModFile}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Remove" Command="{Binding DeleteCommand}"  />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.2" />
+                </ListBox.Background>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Path}" HorizontalAlignment="Stretch">
+                            <Label.Background>
+                                <SolidColorBrush Color="Black" Opacity="0.3" />
+                            </Label.Background>
+                        </Label>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

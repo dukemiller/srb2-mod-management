@@ -33,8 +33,9 @@
     </UserControl.Resources>
     <DockPanel>
         <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
-            <Button Content="Launch game" Command="{Binding StartCommand}" Margin="0,0,5,0" Background="Green" />
-            <Button Command="{Binding FindModsCommand}" Content="Get more mods" />
+            <Button Content="Launch game" Command="{Binding StartCommand}"  Background="Green" />
+            <Button Command="{Binding FindModsCommand}" Margin="5,0" Content="Get more mods" />
+            <Button Command="{Binding AddModsCommand}" Content="Add local mod" />
             <Button Command="{Binding OpenSettingsCommand}" DockPanel.Dock="Right" Content="Settings" />
             <Button Command="{Binding DeselectCommand}" Margin="0,0,5,0"  DockPanel.Dock="Right" Content="Deselect all" />
         </DockPanel>

@@ -107,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\Components\Add.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Components\Categories.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -170,12 +174,16 @@
     <Compile Include="Services\Interface\IModRetreiverService.cs" />
     <Compile Include="Services\SRB2ForumService.cs" />
     <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModels\Components\AddViewModel.cs" />
     <Compile Include="ViewModels\Components\CategoriesViewModel.cs" />
     <Compile Include="ViewModels\Components\ReleasesViewModel.cs" />
     <Compile Include="ViewModels\Components\ReleaseViewModel.cs" />
     <Compile Include="ViewModels\DiscoverViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\Components\Add.xaml.cs">
+      <DependentUpon>Add.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Components\Categories.xaml.cs">
       <DependentUpon>Categories.xaml</DependentUpon>
     </Compile>

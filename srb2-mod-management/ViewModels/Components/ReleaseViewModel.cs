@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -284,7 +285,7 @@ namespace srb2_mod_management.ViewModels.Components
             {
                 Id = Release.Id,
                 Name = name,
-                Files = extractedFiles.Select(file => new ModFile { Path = Path.Combine(path, file) }).ToList(),
+                Files = new ObservableCollection<ModFile>(extractedFiles.Select(file => new ModFile { Path = Path.Combine(path, file) })),
                 ChangedThings = Release.ChangedThings
             };
 

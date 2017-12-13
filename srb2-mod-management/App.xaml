@@ -65,6 +65,9 @@
                 <components:Releases DataContext="{Binding}" />
             </DataTemplate>
             
+            <DataTemplate DataType="{x:Type viewModelComponents:AddViewModel}">
+                <components:Add DataContext="{Binding}" />
+            </DataTemplate>
             
         </ResourceDictionary>
     </Application.Resources>
