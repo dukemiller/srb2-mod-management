@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
 using srb2_mod_management.ViewModels;
 
@@ -16,7 +17,7 @@ namespace srb2_mod_management.Views
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ((MainWindowViewModel) DataContext).DialogCoordinator = DialogCoordinator.Instance;
+            SimpleIoc.Default.Register<IDialogCoordinator, DialogCoordinator>();
         }
     }
 }

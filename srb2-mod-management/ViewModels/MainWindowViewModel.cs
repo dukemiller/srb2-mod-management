@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using MahApps.Metro.Controls.Dialogs;
 using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
 
@@ -29,8 +27,6 @@ namespace srb2_mod_management.ViewModels
         // 
 
         public RelayCommand GoBackCommand { get; set; }
-
-        public IDialogCoordinator DialogCoordinator { get; set; }
 
         public bool SettingsIsOpen
         {

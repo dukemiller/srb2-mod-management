@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                       DataContext="{Binding Source={StaticResource Locator}, Path=Discover}"
-             
-             xmlns:local="clr-namespace:srb2_mod_management.Views"
+             dialogs:DialogParticipation.Register="{Binding}"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:xaml="clr-namespace:srb2_mod_management.Classes.Xaml"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.InputBindings>

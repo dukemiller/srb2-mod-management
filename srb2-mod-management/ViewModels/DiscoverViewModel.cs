@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using MahApps.Metro.Controls.Dialogs;
 using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
 using srb2_mod_management.ViewModels.Components;
@@ -80,22 +83,55 @@ namespace srb2_mod_management.ViewModels
 
         private async void HandleDiscoverModel(DiscoverModel discoverModel)
         {
-            switch (discoverModel.RequestedView)
+            // Whatever view im requesting, im on the logical view before that
+            // when these transition states are attempted
+
+            try
             {
-                case ComponentViews.Releases:
-                    Display = await SimpleIoc.Default.GetInstance<ReleasesViewModel>().SetModel(discoverModel);
-                    break;
-                case ComponentViews.Release:
-                    Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(discoverModel);
-                    break;
-                case ComponentViews.Categories:
-                    Display = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (discoverModel.RequestedView)
+                {
+                    case ComponentViews.Releases:
+                        Display = await SimpleIoc.Default.GetInstance<ReleasesViewModel>().SetModel(discoverModel);
+                        break;
+                    case ComponentViews.Release:
+                        Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(discoverModel);
+                        break;
+                    case ComponentViews.Categories:
+                        Display = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                _views.Push(discoverModel.RequestedView);
             }
 
-            _views.Push(discoverModel.RequestedView);
+            catch (HttpRequestException)
+            {
+                switch (discoverModel.RequestedView)
+                {
+                    case ComponentViews.Categories:
+                        break;
+                    case ComponentViews.Release:
+                        var releases = (ReleasesViewModel) Display;
+                        releases.LoadingPage = false;
+                        break;
+                    case ComponentViews.Releases:
+                        var categories = (CategoriesViewModel) Display;
+                        categories.Loading = false;
+                        break;
+                }
+
+                // Display error
+                var dialog = SimpleIoc.Default.GetInstance<IDialogCoordinator>();
+                await dialog.ShowMessageAsync(this,
+                    "Network Error",
+                    "A network error occured while trying to complete this action. " +
+                    "Ensure you're properly connected with no firewall blocking this application and try again. " +
+                    "If the problem persists, it may be a server issue.");
+
+                Back();
+            }
         }
 
         private async void HandleMod(ReleaseInfo releaseInfo, Category category)

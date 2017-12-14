@@ -16,6 +16,8 @@ using srb2_mod_management.Services.Interface;
 using SharpCompress.Archives;
 using SharpCompress.Readers;
 using System.Text.RegularExpressions;
+using GalaSoft.MvvmLight.Ioc;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace srb2_mod_management.ViewModels.Components
 {
@@ -242,12 +244,36 @@ namespace srb2_mod_management.ViewModels.Components
 
             var extractedFiles = new List<string>();
 
-            foreach (var download in Release.Downloads)
+            var downloadPath = "";
+
+            try
             {
-                var filepath = Path.Combine(path, download.Filename);
-                if (!File.Exists(filepath))
-                    await Downloader.DownloadFileTaskAsync(download.Link, filepath);
-                downloaded.Add(filepath);
+                foreach (var download in Release.Downloads)
+                {
+                    downloadPath = Path.Combine(path, download.Filename);
+                    if (!File.Exists(downloadPath))
+                        await Downloader.DownloadFileTaskAsync(download.Link, downloadPath);
+                    downloaded.Add(downloadPath);
+                }
+            }
+
+            catch (WebException)
+            {
+                // Remove the offending file
+                File.Delete(downloadPath);
+
+                // Display error
+                var dialog = SimpleIoc.Default.GetInstance<IDialogCoordinator>();
+                await dialog.ShowMessageAsync(this,
+                    "Network Error",
+                    "A network error occured while trying to complete this action. " +
+                    "Ensure you're properly connected with no firewall blocking this application and try again. " +
+                    "If the problem persists, it may be a server issue.");
+
+                NotDownloaded = true;
+                Downloading = false;
+                RaisePropertyChanged(nameof(DownloadText));
+                return;
             }
 
             foreach (var filepath in downloaded)

@@ -8,6 +8,8 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             dialogs:DialogParticipation.Register="{Binding}"
              mc:Ignorable="d"
              Background="{StaticResource WindowBackgroundBrush}"
              d:DataContext="{d:DesignInstance componentsVm:ReleaseViewModel}"
