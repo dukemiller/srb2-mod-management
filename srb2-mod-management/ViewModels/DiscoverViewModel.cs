@@ -27,10 +27,10 @@ namespace srb2_mod_management.ViewModels
             _views.Push(ComponentView.Categories);
 
             MessengerInstance.Register<DiscoverModel>(this, HandleDiscoverModel);
+            MessengerInstance.Register<ProfileModel>(this, HandleProfile);
             MessengerInstance.Register<Action>(this, HandleAction);
-            MessengerInstance.Register<ComponentView>(this, HandleComponentView);
-            MessengerInstance.Register<(ReleaseInfo, Category)>(this, _ => HandleMod(_.Item1, _.Item2));
             MessengerInstance.Register<View>(this, HandleView);
+            MessengerInstance.Register<ComponentView>(this, HandleComponentView);
 
             BackCommand = new RelayCommand(Back);
         }
@@ -55,7 +55,7 @@ namespace srb2_mod_management.ViewModels
                 switch (_views.Pop())
                 {
                     case ComponentView.Categories:
-                        MessengerInstance.Send(Enums.View.Home);
+                        MessengerInstance.Send(View.Home);
                         break;
                     case ComponentView.Release:
                         var releases = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
@@ -73,7 +73,7 @@ namespace srb2_mod_management.ViewModels
             }
 
             else
-                MessengerInstance.Send(Enums.View.Home);
+                MessengerInstance.Send(View.Home);
         }
 
         private void HandleAction(Action action)
@@ -82,44 +82,47 @@ namespace srb2_mod_management.ViewModels
                 BackCommand.Execute(null);
         }
 
-        private async void HandleDiscoverModel(DiscoverModel discoverModel)
+        /// <summary>
+        ///     Received the view driver model, depending on request change view and set appropriate model
+        /// </summary>
+        private async void HandleDiscoverModel(DiscoverModel discover)
         {
             // Whatever view im requesting, im on the logical view before that
             // when these transition states are attempted
 
             try
             {
-                switch (discoverModel.RequestedView)
+                switch (discover.RequestedView)
                 {
-                    case ComponentView.Releases:
-                        Display = await SimpleIoc.Default.GetInstance<ReleasesViewModel>().SetModel(discoverModel);
-                        break;
-                    case ComponentView.Release:
-                        Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(discoverModel);
-                        break;
                     case ComponentView.Categories:
                         Display = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
+                        break;
+                    case ComponentView.Releases:
+                        Display = await SimpleIoc.Default.GetInstance<ReleasesViewModel>().SetModel(discover);
+                        break;
+                    case ComponentView.Release:
+                        Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(discover);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                _views.Push(discoverModel.RequestedView);
+                _views.Push(discover.RequestedView);
             }
 
             catch (HttpRequestException)
             {
-                switch (discoverModel.RequestedView)
+                switch (discover.RequestedView)
                 {
                     case ComponentView.Categories:
                         break;
-                    case ComponentView.Release:
-                        var releases = (ReleasesViewModel) Display;
-                        releases.LoadingPage = false;
-                        break;
                     case ComponentView.Releases:
-                        var categories = (CategoriesViewModel) Display;
-                        categories.Loading = false;
+                        if (Display is CategoriesViewModel categories)
+                            categories.Loading = false;
+                        break;
+                    case ComponentView.Release:
+                        if (Display is ReleasesViewModel releases)
+                            releases.LoadingPage = false;
                         break;
                 }
 
@@ -135,20 +138,25 @@ namespace srb2_mod_management.ViewModels
             }
         }
 
-        private async void HandleMod(ReleaseInfo releaseInfo, Category category)
+        /// <summary>
+        ///     Received a direct profile request, convert it to discover model and send to Release view
+        /// </summary>
+        private async void HandleProfile(ProfileModel profile)
         {
             var model = new DiscoverModel
             {
                 RequestedView = ComponentView.Release,
-                Category = category,
-                ReleaseInfo = releaseInfo
+                Category = profile.Category,
+                ReleaseInfo = profile.ReleaseInfo,
+                Refresh = profile.Refresh
             };
             
             Display = await SimpleIoc.Default.GetInstance<ReleaseViewModel>().SetModel(model);
-
-            // _views.Clear();
         }
 
+        /// <summary>
+        ///     Received only a componentview, most likely just an Add
+        /// </summary>
         private void HandleComponentView(ComponentView view)
         {
             switch (view)
@@ -156,11 +164,11 @@ namespace srb2_mod_management.ViewModels
                 case ComponentView.Categories:
                     Display = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
                     break;
-                case ComponentView.Release:
-                    Display = SimpleIoc.Default.GetInstance<ReleaseViewModel>();
-                    break;
                 case ComponentView.Releases:
                     Display = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
+                    break;
+                case ComponentView.Release:
+                    Display = SimpleIoc.Default.GetInstance<ReleaseViewModel>();
                     break;
                 case ComponentView.Add:
                     var vm = SimpleIoc.Default.GetInstance<AddViewModel>();
@@ -172,6 +180,9 @@ namespace srb2_mod_management.ViewModels
             }
         }
 
+        /// <summary>
+        ///     Received a direct view change, global view request change, set progressable states to default
+        /// </summary>
         private static void HandleView(View view)
         {
             // Remove any loading states

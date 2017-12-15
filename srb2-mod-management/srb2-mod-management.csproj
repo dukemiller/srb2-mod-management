@@ -167,6 +167,7 @@
     <Compile Include="Models\GameOptions.cs" />
     <Compile Include="Models\ModFile.cs" />
     <Compile Include="Models\Mod.cs" />
+    <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\Star.cs" />
     <Compile Include="Repositories\DownloadedModsRepository.cs" />
     <Compile Include="Repositories\Interface\IDownloadedModsRepository.cs" />

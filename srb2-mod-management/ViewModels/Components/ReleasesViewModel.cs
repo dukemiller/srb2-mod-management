@@ -100,6 +100,7 @@ namespace srb2_mod_management.ViewModels.Components
             {
                 _model.ReleaseInfo = SelectedRelease;
                 _model.RequestedView = ComponentView.Release;
+                _model.Refresh = true;
                 MessengerInstance.Send(_model);
                 LoadingPage = true;
             }

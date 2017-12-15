@@ -52,13 +52,21 @@ namespace srb2_mod_management.ViewModels.Components
 
         public async Task<ReleaseViewModel> SetModel(DiscoverModel model)
         {
+            // Models
+
             _model = model;
             Release = await _modService.RetrieveRelease(_model.ReleaseInfo);
+
+            // Commands
+
             DownloadCommand = new RelayCommand(Download,
                 () => !_downloadedMods.AlreadyContains(_model.Category, Release)
                       && !Downloading);
             RefreshCommand = new RelayCommand(() => _modService.UpdateRelease(_model.ReleaseInfo));
             NotDownloaded = !_downloadedMods.AlreadyContains(_model.Category, Release);
+
+            // Set download information
+
             if (!NotDownloaded)
             {
                 Mod = _downloadedMods.Find(model.Category, model.ReleaseInfo);
@@ -68,9 +76,16 @@ namespace srb2_mod_management.ViewModels.Components
                     file.PropertyChanged += FileOnPropertyChanged;
                 }
             }
+
+            // 
+
             Status = "Available to use.";
             Index = 0;
             Image = "";
+
+            if (model.Refresh)
+                await _modService.UpdateRelease(_model.ReleaseInfo);
+
             return this;
         }
 

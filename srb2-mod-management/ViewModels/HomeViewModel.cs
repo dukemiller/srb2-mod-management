@@ -235,8 +235,15 @@ namespace srb2_mod_management.ViewModels
             if (modinfo == null)
                 return;
 
+            var model = new ProfileModel
+            {
+                Category = category,
+                ReleaseInfo = modinfo,
+                Refresh = false
+            };
+            
             MessengerInstance.Send(View.Discover);
-            MessengerInstance.Send((modinfo, category));
+            MessengerInstance.Send(model);
         }
     }
 }

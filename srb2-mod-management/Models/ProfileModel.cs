@@ -2,11 +2,10 @@
 
 namespace srb2_mod_management.Models
 {
-    public class DiscoverModel
+    public class ProfileModel
     {
-        public Category Category { get; set; }
         public ReleaseInfo ReleaseInfo { get; set; }
-        public ComponentView RequestedView { get; set; }
+        public Category Category { get; set; }
         public bool Refresh { get; set; }
     }
 }
