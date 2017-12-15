@@ -30,13 +30,27 @@
     </controls:MetroWindow.Flyouts>
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Command="{Binding GoBackCommand}" ToolTip="Goes back a view. (Also press Escape or Mouse-Back)">
-                <iconPacks:PackIconFontAwesome VerticalAlignment="Center" Width="30" Height="25" Kind="ArrowCircleLeft" />
-            </Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding GoHomeCommand}" 
+                        Padding="0"
+                        Visibility="{Binding IsHome, Converter={StaticResource BoolVisibilityReverseConverter}}"
+                        ToolTip="Goes to the home view.">
+                    <iconPacks:PackIconFontAwesome VerticalAlignment="Center" 
+                                                   Width="30" Height="25" 
+                                                   Kind="Home" />
+                </Button>
+                <Button Command="{Binding GoBackCommand}" 
+                        Visibility="{Binding IsHome, Converter={StaticResource BoolVisibilityReverseConverter}}"
+                        ToolTip="Goes back a view. (Also press Escape or Mouse-Back)">
+                    <iconPacks:PackIconFontAwesome VerticalAlignment="Center" 
+                                                   Width="30" Height="25"
+                                                   Kind="ArrowCircleLeft" />
+                </Button>
+            </StackPanel>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
     <controls:MetroWindow.InputBindings>
-        <KeyBinding Key="Escape" Command="{Binding GoBackCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding GoBackCommand}" />
     </controls:MetroWindow.InputBindings>
-    <controls:MetroContentControl Margin="8" Content="{Binding Display}"/>
+    <controls:MetroContentControl Margin="8" Content="{Binding Display}" />
 </controls:MetroWindow>

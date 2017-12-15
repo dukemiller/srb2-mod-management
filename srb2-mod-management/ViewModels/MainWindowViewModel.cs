@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
+using Action = srb2_mod_management.Enums.Action;
 
 namespace srb2_mod_management.ViewModels
 {
@@ -14,19 +15,24 @@ namespace srb2_mod_management.ViewModels
 
         private ViewModelBase _display;
 
+        private bool _isHome = true;
+
         // 
 
         public MainWindowViewModel()
         {
-            MessengerInstance.Register<Actions>(this, ActionMessage);
-            MessengerInstance.Register<Enums.Views>(this, ViewMessage);
+            MessengerInstance.Register<Action>(this, ActionMessage);
+            MessengerInstance.Register<View>(this, ViewMessage);
             Display = SimpleIoc.Default.GetInstance<HomeViewModel>();
-            GoBackCommand = new RelayCommand(() => MessengerInstance.Send(Actions.GoBack));
+            GoBackCommand = new RelayCommand(() => MessengerInstance.Send(Action.GoBack));
+            GoHomeCommand = new RelayCommand(() => MessengerInstance.Send(View.Home));
         }
 
         // 
 
         public RelayCommand GoBackCommand { get; set; }
+
+        public RelayCommand GoHomeCommand { get; set; }
 
         public bool SettingsIsOpen
         {
@@ -40,13 +46,19 @@ namespace srb2_mod_management.ViewModels
             set => Set(() => Display, ref _display, value);
         }
 
+        public bool IsHome
+        {
+            get => _isHome;
+            set => Set(() => IsHome, ref _isHome, value);
+        }
+
         // 
 
-        private void ActionMessage(Actions action)
+        private void ActionMessage(Action action)
         {
             switch (action)
             {
-                case Actions.ToggleSettings:
+                case Action.ToggleSettings:
                     SettingsIsOpen ^= true;
                     break;
                 default:
@@ -54,11 +66,11 @@ namespace srb2_mod_management.ViewModels
             }
         }
 
-        private void ViewMessage(Enums.Views view)
+        private void ViewMessage(View view)
         {
             switch (view)
             {
-                case Enums.Views.Home:
+                case View.Home:
                     // Remove selections
                     var vm = SimpleIoc.Default.GetInstance<HomeViewModel>();
                     vm.SelectedCharacters = new ObservableCollection<Mod>();
@@ -66,10 +78,12 @@ namespace srb2_mod_management.ViewModels
                     vm.SelectedLevels = new ObservableCollection<Mod>();
                     vm.SelectedScripts = new ObservableCollection<Mod>();
                     Display = vm;
+                    IsHome = true;
                     break;
 
-                case Enums.Views.Discover:
+                case View.Discover:
                     Display = SimpleIoc.Default.GetInstance<DiscoverViewModel>();
+                    IsHome = false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(view), view, null);

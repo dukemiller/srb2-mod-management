@@ -6,6 +6,6 @@ namespace srb2_mod_management.Models
     {
         public Category Category { get; set; }
         public ReleaseInfo ReleaseInfo { get; set; }
-        public ComponentViews RequestedView { get; set; }
+        public ComponentView RequestedView { get; set; }
     }
 }

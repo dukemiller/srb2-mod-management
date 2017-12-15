@@ -1,6 +1,6 @@
 ﻿namespace srb2_mod_management.Enums
 {
-    public enum Actions
+    public enum Action
     {
         ToggleSettings,
         GoBack

@@ -11,6 +11,7 @@ using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
 using srb2_mod_management.Repositories.Interface;
 using srb2_mod_management.Services.Interface;
+using Action = srb2_mod_management.Enums.Action;
 
 namespace srb2_mod_management.ViewModels
 {
@@ -45,16 +46,16 @@ namespace srb2_mod_management.ViewModels
             _modService = modService;
 
             // Commands
-            OpenSettingsCommand = new RelayCommand(() => MessengerInstance.Send(Actions.ToggleSettings));
+            OpenSettingsCommand = new RelayCommand(() => MessengerInstance.Send(Action.ToggleSettings));
             FindModsCommand = new RelayCommand(() =>
             {
-                MessengerInstance.Send(Enums.Views.Discover);
-                MessengerInstance.Send(ComponentViews.Categories);
+                MessengerInstance.Send(View.Discover);
+                MessengerInstance.Send(ComponentView.Categories);
             });
             AddModsCommand = new RelayCommand(() =>
             {
-                MessengerInstance.Send(Enums.Views.Discover);
-                MessengerInstance.Send(ComponentViews.Add);
+                MessengerInstance.Send(View.Discover);
+                MessengerInstance.Send(ComponentView.Add);
             });
             StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
             DeleteCommand = new RelayCommand(Delete);
@@ -103,7 +104,7 @@ namespace srb2_mod_management.ViewModels
 
         public RelayCommand DeselectCommand { get; set; }
 
-        public Action DeselectRequest { get; set; }
+        public System.Action DeselectRequest { get; set; }
 
         public int Index
         {
@@ -234,7 +235,7 @@ namespace srb2_mod_management.ViewModels
             if (modinfo == null)
                 return;
 
-            MessengerInstance.Send(Enums.Views.Discover);
+            MessengerInstance.Send(View.Discover);
             MessengerInstance.Send((modinfo, category));
         }
     }

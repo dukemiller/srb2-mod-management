@@ -157,10 +157,10 @@
     </Compile>
     <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\Xaml\MouseBindings.cs" />
-    <Compile Include="Enums\Actions.cs" />
-    <Compile Include="Enums\ComponentViews.cs" />
+    <Compile Include="Enums\Action.cs" />
+    <Compile Include="Enums\ComponentView.cs" />
     <Compile Include="Enums\Category.cs" />
-    <Compile Include="Enums\Views.cs" />
+    <Compile Include="Enums\View.cs" />
     <Compile Include="Models\DiscoverModel.cs" />
     <Compile Include="Models\DownloadLink.cs" />
     <Compile Include="Models\GameOptions.cs" />

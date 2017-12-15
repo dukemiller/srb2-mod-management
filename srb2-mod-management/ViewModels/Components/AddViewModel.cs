@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using srb2_mod_management.Enums;
 using srb2_mod_management.Models;
 using srb2_mod_management.Repositories.Interface;
+using Action = srb2_mod_management.Enums.Action;
 
 namespace srb2_mod_management.ViewModels.Components
 {
@@ -32,7 +33,7 @@ namespace srb2_mod_management.ViewModels.Components
             OpenFileBrowserCommand = new RelayCommand(OpenFileBrowser);
             AddCommand = new RelayCommand(Add, CanAdd);
             DeleteCommand = new RelayCommand(Delete);
-            CancelCommand = new RelayCommand(() => MessengerInstance.Send(Actions.GoBack));
+            CancelCommand = new RelayCommand(() => MessengerInstance.Send(Action.GoBack));
         }
 
         private void ModOnPropertyChanged(object sender, PropertyChangedEventArgs args) => AddCommand.RaiseCanExecuteChanged();
@@ -110,7 +111,7 @@ namespace srb2_mod_management.ViewModels.Components
                 .Select(s => s.Trim()).ToList();
 
             _modsRepository.Add(SelectedCategory, Mod);
-            MessengerInstance.Send(Actions.GoBack);
+            MessengerInstance.Send(Action.GoBack);
         }
 
         private bool CanAdd() => Mod != null 

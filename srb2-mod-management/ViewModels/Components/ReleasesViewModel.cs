@@ -99,7 +99,7 @@ namespace srb2_mod_management.ViewModels.Components
             if (SelectedRelease != null)
             {
                 _model.ReleaseInfo = SelectedRelease;
-                _model.RequestedView = ComponentViews.Release;
+                _model.RequestedView = ComponentView.Release;
                 MessengerInstance.Send(_model);
                 LoadingPage = true;
             }

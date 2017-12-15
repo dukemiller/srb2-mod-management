@@ -21,7 +21,7 @@ namespace srb2_mod_management.ViewModels.Components
                     MessengerInstance.Send(new DiscoverModel
                     {
                         Category = ToCategory(_),
-                        RequestedView = ComponentViews.Releases
+                        RequestedView = ComponentView.Releases
                     });
                 },
                 _ => !Loading);
