@@ -280,8 +280,7 @@ namespace srb2_mod_management.Services
                 Releases[url] = await getRelease();
                 await Save();
             }
-
-
+            
             return Releases[url];
         }
 

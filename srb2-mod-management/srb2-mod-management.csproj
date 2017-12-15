@@ -156,6 +156,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\Converters.cs" />
+    <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\Xaml\MouseBindings.cs" />
     <Compile Include="Enums\Action.cs" />
     <Compile Include="Enums\ComponentView.cs" />
