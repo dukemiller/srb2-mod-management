@@ -17,7 +17,6 @@ namespace srb2_mod_management.Repositories.Interface
         /// <summary>
         ///     Discern whether the path to the executable is valid.
         /// </summary>
-        /// <returns></returns>
         bool PathValid();
     }
 }

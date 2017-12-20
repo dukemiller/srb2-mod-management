@@ -11,11 +11,10 @@
              Width="400">
     <DockPanel LastChildFill="False" DataContext="{Binding Options}">
         <Label DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.4" Content="{Binding Source={StaticResource Locator}, Path=Home.Version}"/>
-        <DockPanel DockPanel.Dock="Top">
-            <Label VerticalAlignment="Center">SRB2 path:</Label>
-            <TextBox Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged, Delay=800}" Margin="5,0"
-                     VerticalAlignment="Center" FontSize="18" />
-        </DockPanel>
+        <Label FontWeight="DemiBold" DockPanel.Dock="Top" VerticalAlignment="Center">SRB2 exe path</Label>
+        <TextBox Text="{Binding GameExe, UpdateSourceTrigger=PropertyChanged, Delay=800}" Margin="5,0"
+                 DockPanel.Dock="Top"
+                 VerticalAlignment="Center" FontSize="18" />
         <Separator DockPanel.Dock="Top" Opacity="0" Margin="0,5"/>
 
         <Label DockPanel.Dock="Top" Content="General" FontWeight="DemiBold"/>

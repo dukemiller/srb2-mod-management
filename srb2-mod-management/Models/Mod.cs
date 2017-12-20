@@ -20,6 +20,9 @@ namespace srb2_mod_management.Models
 
         // 
 
+        /// <summary>
+        ///     The name of the mod.
+        /// </summary>
         [JsonProperty("name")]
         public string Name
         {
@@ -27,9 +30,15 @@ namespace srb2_mod_management.Models
             set => Set(() => Name, ref _name, value);
         }
 
+        /// <summary>
+        ///     The unique identifier.
+        /// </summary>
         [JsonProperty("id")]
         public int Id { get; set; }
 
+        /// <summary>
+        ///     Every file on disk associated with this mod.
+        /// </summary>
         [JsonProperty("files")]
         public ObservableCollection<ModFile> Files
         {
@@ -37,9 +46,15 @@ namespace srb2_mod_management.Models
             set => Set(() => Files, ref _files, value);
         }
 
+        /// <summary>
+        ///     All files that will be added when launching.
+        /// </summary>
         [JsonIgnore]
         public List<ModFile> ModFiles => Files.Where(file => file.IsModFile).ToList();
 
+        /// <summary>
+        ///     Everything that the mod states that it changes.
+        /// </summary>
         [JsonProperty("changed_things")]
         public List<string> ChangedThings
         {
@@ -47,6 +62,9 @@ namespace srb2_mod_management.Models
             set => Set(() => ChangedThings, ref _changedThings, value);
         }
 
+        /// <summary>
+        ///     Whether or not the mod is highlighted.
+        /// </summary>
         [JsonProperty("highlighted", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool Highlighted
         {
@@ -54,6 +72,9 @@ namespace srb2_mod_management.Models
             set => Set(() => Highlighted, ref _highlighted, value);
         }
 
+        /// <summary>
+        ///     If the mod was added locally or not.
+        /// </summary>
         [JsonProperty("user_added", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsUserAdded { get; set; }
     }

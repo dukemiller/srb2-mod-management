@@ -14,7 +14,7 @@ namespace srb2_mod_management.Models
     [Serializable]
     public class GameOptions: ObservableObject
     {
-        private string _gamePath = "";
+        private string _gameExe = "";
 
         private bool _openGl = true;
 
@@ -30,14 +30,15 @@ namespace srb2_mod_management.Models
 
         // 
 
+
         /// <summary>
-        ///     Path to the game folder.
+        ///     Path to the SRB2Win executable.
         /// </summary>
-        [JsonProperty("game_path")]
-        public string GamePath
+        [JsonProperty("game_exe")]
+        public string GameExe
         {
-            get => _gamePath;
-            set => Set(() => GamePath, ref _gamePath, value);
+            get => _gameExe;
+            set => Set(() => GameExe, ref _gameExe, value);
         }
 
         /// <summary>
@@ -101,11 +102,11 @@ namespace srb2_mod_management.Models
         }
 
         /// <summary>
-        ///     Path to the SRB2Win executable.
+        ///     Path to the game folder.
         /// </summary>
         [JsonIgnore]
-        public string GameExe => Path.Combine(GamePath, "srb2win.exe");
-
+        public string GamePath => Path.GetDirectoryName(GameExe);
+        
         /// <summary>
         ///     Build the commandline argument that would be passed to the executable.
         /// </summary>
@@ -140,6 +141,5 @@ namespace srb2_mod_management.Models
 
             return arguments;
         }
-
     }
 }

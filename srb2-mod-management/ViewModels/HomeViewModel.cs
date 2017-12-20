@@ -74,7 +74,7 @@ namespace srb2_mod_management.ViewModels
             Options = _settings.Options;
             Options.PropertyChanged += (sender, args) =>
             {
-                if (args.PropertyName == "GamePath")
+                if (args.PropertyName == "GameExe")
                     StartCommand.RaiseCanExecuteChanged();
                 _settings.Save();
             };
