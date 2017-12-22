@@ -137,5 +137,6 @@ namespace srb2_mod_management.ViewModels.Components
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LoadingPage = false;
         }
+        
     }
 }

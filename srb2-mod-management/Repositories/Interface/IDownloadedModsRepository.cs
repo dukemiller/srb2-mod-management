@@ -31,12 +31,12 @@ namespace srb2_mod_management.Repositories.Interface
         /// <summary>
         ///     Determine if a category already contains a specific type of release.
         /// </summary>
-        bool AlreadyContains(Category category, Release release);
+        bool Contains(Category category, Release release);
 
         /// <summary>
         ///     Determine if a category contains an item that has a specific id.
         /// </summary>
-        bool AlreadyContains(Category category, int id);
+        bool Contains(Category category, int id);
 
         /// <summary>
         ///     Add the given mod via the category.

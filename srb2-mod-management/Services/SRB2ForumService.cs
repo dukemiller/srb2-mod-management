@@ -45,7 +45,7 @@ namespace srb2_mod_management.Services
         {
             var retrievedPage = await _data.FindPage(category, page, () => GetPage(category, page));
             foreach(var release in retrievedPage.Releases)
-                release.AlreadyDownloaded = _modsRepository.AlreadyContains(category, release.Id);
+                release.AlreadyDownloaded = _modsRepository.Contains(category, release.Id);
             return retrievedPage;
         }
 

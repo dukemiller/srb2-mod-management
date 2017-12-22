@@ -28,9 +28,9 @@ namespace srb2_mod_management.Repositories
         [JsonProperty("scripts")]
         public ObservableCollection<Mod> Scripts { get; } = new ObservableCollection<Mod>();
 
-        public bool AlreadyContains(Category category, Release release) => GetCollectionForCategory(category).Any(mod => mod?.Id == release.Id);
+        public bool Contains(Category category, Release release) => GetCollectionForCategory(category).Any(mod => mod?.Id == release.Id);
 
-        public bool AlreadyContains(Category category, int id) => GetCollectionForCategory(category).Any(mod => mod?.Id == id);
+        public bool Contains(Category category, int id) => GetCollectionForCategory(category).Any(mod => mod?.Id == id);
 
         public bool AlreadyContains(Category category, ReleaseInfo release) => GetCollectionForCategory(category).Any(mod => mod.Id == release.Id);
 

@@ -63,7 +63,7 @@ namespace srb2_mod_management.ViewModels.Components
                 () => !_downloadedMods.AlreadyContains(_model.Category, Release)
                       && !Downloading);
             RefreshCommand = new RelayCommand(() => _modService.UpdateRelease(_model.ReleaseInfo));
-            NotDownloaded = !_downloadedMods.AlreadyContains(_model.Category, Release);
+            NotDownloaded = !_downloadedMods.Contains(_model.Category, Release);
 
             // Set download information
 
