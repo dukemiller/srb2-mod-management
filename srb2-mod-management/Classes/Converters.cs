@@ -85,4 +85,51 @@ namespace srb2_mod_management.Classes
             return !System.Convert.ToBoolean(value);
         }
     }
+
+    public class AOrNotBConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var a = System.Convert.ToBoolean(values.FirstOrDefault());
+            var b = System.Convert.ToBoolean(values.Skip(1).FirstOrDefault());
+            return a || !b ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AAndNotBConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var a = System.Convert.ToBoolean(values.FirstOrDefault());
+            var b = System.Convert.ToBoolean(values.Skip(1).FirstOrDefault());
+            return a && !b ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AAndBConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            var a = System.Convert.ToBoolean(values.FirstOrDefault());
+            var b = System.Convert.ToBoolean(values.Skip(1).FirstOrDefault());
+            return a && b ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
 }
