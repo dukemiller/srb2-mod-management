@@ -112,6 +112,9 @@ namespace srb2_mod_management.ViewModels
             set => Set(() => Index, ref _index, value);
         }
 
+        /// <summary>
+        ///     Indication of the exe being started
+        /// </summary>
         public bool Starting
         {
             get => _starting;

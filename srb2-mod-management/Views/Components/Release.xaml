@@ -27,13 +27,37 @@
     <DockPanel>
         <Grid DockPanel.Dock="Bottom">
             <Button Command="{Binding DownloadCommand}"
-                    Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityConverter}}"
-                    Content="{Binding DownloadText}" />
+                    Content="{Binding DownloadText}" >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Visibility">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource AAndNotBConverter}">
+                                    <Binding Path="Available" />
+                                    <Binding Path="Downloaded" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Label FontSize="18"
                    VerticalAlignment="Center"
                    Opacity="0.4"
-                   Content="{Binding Status}"
-                   Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityReverseConverter}}" />
+                   Content="{Binding Status}">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                        <Setter Property="Visibility">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource AOrNotBConverter}">
+                                    <Binding Path="Downloaded" />
+                                    <Binding Path="Available" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Label.Style>
+            </Label>
         </Grid>
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -82,8 +106,19 @@
                     <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
             </controls:MetroTabItem>
-            <controls:MetroTabItem Header="Files"
-                                   Visibility="{Binding NotDownloaded, Converter={StaticResource BoolVisibilityReverseConverter}}">
+            <controls:MetroTabItem Header="Files">
+                <controls:MetroTabItem.Style>
+                    <Style TargetType="{x:Type controls:MetroTabItem}">
+                        <Setter Property="Visibility">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource AAndBConverter}">
+                                    <Binding Path="Downloaded" />
+                                    <Binding Path="Available" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </controls:MetroTabItem.Style>
                 <components:Files DataContext="{Binding Mod}" />
             </controls:MetroTabItem>
         </controls:MetroAnimatedSingleRowTabControl>

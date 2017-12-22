@@ -27,15 +27,16 @@ namespace srb2_mod_management.ViewModels.Components
         private readonly IModRetreiverService _modService;
         private readonly IDownloadedModsRepository _downloadedMods;
         private static string ImageFolder => Path.Combine(SettingsRepository.ApplicationDirectory, "images");
-        private Release _release;
-        private string _image;
-        private int _index;
         private DiscoverModel _model;
+        private Release _release;
+        private Mod _mod;
+        private string _image;
+        private string _status;
+        private int _index;
         private bool _loadingImage;
         private bool _downloading;
-        private bool _notDownloaded;
-        private string _status;
-        private Mod _mod;
+        private bool _downloaded;
+        private bool _available;
 
         // 
 
@@ -43,6 +44,9 @@ namespace srb2_mod_management.ViewModels.Components
         {
             _modService = modService;
             _downloadedMods = downloadedMods;
+
+            DownloadCommand = new RelayCommand(Download, CanDownload);
+            RefreshCommand = new RelayCommand(() => _modService.UpdateRelease(_model.ReleaseInfo));
             PreviousImageCommand = new RelayCommand(PreviousImage, () => !LoadingImage);
             NextImageCommand = new RelayCommand(NextImage, () => !LoadingImage);
             WebpageCommand = new RelayCommand(() => Process.Start(_model.ReleaseInfo.Url));
@@ -56,18 +60,11 @@ namespace srb2_mod_management.ViewModels.Components
 
             _model = model;
             Release = await _modService.RetrieveRelease(_model.ReleaseInfo);
-
-            // Commands
-
-            DownloadCommand = new RelayCommand(Download,
-                () => !_downloadedMods.AlreadyContains(_model.Category, Release)
-                      && !Downloading);
-            RefreshCommand = new RelayCommand(() => _modService.UpdateRelease(_model.ReleaseInfo));
-            NotDownloaded = !_downloadedMods.Contains(_model.Category, Release);
+            Downloaded = _downloadedMods.Contains(_model.Category, Release);
 
             // Set download information
 
-            if (!NotDownloaded)
+            if (Downloaded)
             {
                 Mod = _downloadedMods.Find(model.Category, model.ReleaseInfo);
                 foreach (var file in Mod.Files)
@@ -76,10 +73,20 @@ namespace srb2_mod_management.ViewModels.Components
                     file.PropertyChanged += FileOnPropertyChanged;
                 }
             }
+            
+            if (Retreivable())
+            {
+                Status = "Available to use.";
+                Available = true;
+            }
 
-            // 
+            else
+            {
+                Status = "This cannot be automatically implemented. " +
+                         "To use, download and set up manually.";
+                Available = false;
+            }
 
-            Status = "Available to use.";
             Index = 0;
             Image = "";
 
@@ -89,8 +96,25 @@ namespace srb2_mod_management.ViewModels.Components
             return this;
         }
 
-        private async void FileOnPropertyChanged(object sender, PropertyChangedEventArgs args) => await _downloadedMods.Save();
+        /// <summary>
+        ///     If the mod is suitable to be retrieved
+        /// </summary>
+        private bool Retreivable()
+        {
+            var containsFilteredWord = new[] {"md2", "launcher"}.Any(word => Release.Name.ToLower().Contains(word));
+            var containsFilteredChangedThing = new[] {"Models", "Additional Software"}.Any(changedThing => Release.ChangedThings.Contains(changedThing)) && !Release.Name.Contains("ArchPack");
+            return !containsFilteredWord && !containsFilteredChangedThing;
+        }
 
+        /// <summary>
+        ///     Save on any file change property
+        /// </summary>
+        private async void FileOnPropertyChanged(object sender, PropertyChangedEventArgs args) =>
+            await _downloadedMods.Save();
+
+        /// <summary>
+        ///     Only set the image on the visibility being changed to visible
+        /// </summary>
         public async Task VisibleChanged(bool visible)
         {
             if (visible)
@@ -99,24 +123,36 @@ namespace srb2_mod_management.ViewModels.Components
 
         // 
 
+        /// <summary>
+        ///     The index for the screenshots
+        /// </summary>
         public int Index
         {
             get => _index;
             set => Set(() => Index, ref _index, value);
         }
 
+        /// <summary>
+        ///     The path to the current screenshot
+        /// </summary>
         public string Image
         {
             get => _image;
             set => Set(() => Image, ref _image, value);
         }
 
+        /// <summary>
+        ///     The corresponding release model to the mod
+        /// </summary>
         public Release Release
         {
             get => _release;
             set => Set(() => Release, ref _release, value);
         }
 
+        /// <summary>
+        ///     If currently loading an image
+        /// </summary>
         public bool LoadingImage
         {
             get => _loadingImage;
@@ -128,6 +164,9 @@ namespace srb2_mod_management.ViewModels.Components
             }
         }
 
+        /// <summary>
+        ///     If currently in the process of downloading the mod
+        /// </summary>
         public bool Downloading
         {
             get => _downloading;
@@ -137,19 +176,37 @@ namespace srb2_mod_management.ViewModels.Components
                 DownloadCommand.RaiseCanExecuteChanged();
             }
         }
-       
-        public bool NotDownloaded
+
+        /// <summary>
+        ///     Whether or not the mod is downloaded
+        /// </summary>
+        public bool Downloaded
         {
-            get => _notDownloaded;
-            set => Set(() => NotDownloaded, ref _notDownloaded, value);
+            get => _downloaded;
+            set => Set(() => Downloaded, ref _downloaded, value);
         }
 
+        /// <summary>
+        ///     If the mod is permissed to be downloadable
+        /// </summary>
+        public bool Available
+        {
+            get => _available;
+            set => Set(() => Available, ref _available,  value);
+        }
+
+        /// <summary>
+        ///     The status text replacing the download button
+        /// </summary>
         public string Status
         {
             get => _status;
             set => Set(() => Status, ref _status, value);
         }
 
+        /// <summary>
+        ///     The associated mod itself
+        /// </summary>
         public Mod Mod
         {
             get => _mod;
@@ -166,24 +223,39 @@ namespace srb2_mod_management.ViewModels.Components
 
         public RelayCommand NextImageCommand { get; set; }
 
+        /// <summary>
+        ///     The current position in the total count of screenshots
+        /// </summary>
         public string Progress => $"{Index + 1}/{Release.Screenshots.Count}";
 
+        /// <summary>
+        ///     The text for the download button
+        /// </summary>
         public string DownloadText => Downloading ? "Downloading ..." : "Download";
-        
+
         // 
 
+        /// <summary>
+        ///     Change the image back a position
+        /// </summary>
         private async void PreviousImage()
         {
             Index = Index - 1 < 0 ? Release.Screenshots.Count - 1 : Index - 1;
             await SetImage(Release.Screenshots[Index], Index);
         }
 
+        /// <summary>
+        ///     Change the image up a position
+        /// </summary>
         private async void NextImage()
         {
             Index = (Index + 1) % Release.Screenshots.Count;
             await SetImage(Release.Screenshots[Index], Index);
         }
 
+        /// <summary>
+        ///     Gather the files filename given a url
+        /// </summary>
         private static async Task<string> GetFilename(string url)
         {
             if (!url.ToLower().Contains("srb2.org"))
@@ -204,6 +276,9 @@ namespace srb2_mod_management.ViewModels.Components
             return filename;
         }
 
+        /// <summary>
+        ///     Set the image given the index
+        /// </summary>
         private async Task SetImage(string image, int index)
         {
             if (!File.Exists(image))
@@ -240,6 +315,9 @@ namespace srb2_mod_management.ViewModels.Components
             RaisePropertyChanged(nameof(Progress));
         }
 
+        /// <summary>
+        ///     Attempt to download the current mod
+        /// </summary>
         private async void Download()
         {
             Downloading = true;
@@ -285,7 +363,7 @@ namespace srb2_mod_management.ViewModels.Components
                     "Ensure you're properly connected with no firewall blocking this application and try again. " +
                     "If the problem persists, it may be a server issue.");
 
-                NotDownloaded = true;
+                Downloaded = false;
                 Downloading = false;
                 RaisePropertyChanged(nameof(DownloadText));
                 return;
@@ -326,7 +404,8 @@ namespace srb2_mod_management.ViewModels.Components
             {
                 Id = Release.Id,
                 Name = name,
-                Files = new ObservableCollection<ModFile>(extractedFiles.Select(file => new ModFile { Path = Path.Combine(path, file) })),
+                Files = new ObservableCollection<ModFile>(extractedFiles.Select(file =>
+                    new ModFile {Path = Path.Combine(path, file)})),
                 ChangedThings = Release.ChangedThings
             };
 
@@ -336,11 +415,20 @@ namespace srb2_mod_management.ViewModels.Components
 
             // Notify
 
-            NotDownloaded = false;
+            Downloaded = true;
             Downloading = false;
             Status = "Download successful.";
             RaisePropertyChanged(nameof(DownloadText));
             DownloadCommand.RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        ///     If the download button is available to be pressed
+        /// </summary>
+        private bool CanDownload()
+        {
+            return !_downloadedMods.Contains(_model.Category, Release)
+                   && !Downloading;
         }
     }
 }
