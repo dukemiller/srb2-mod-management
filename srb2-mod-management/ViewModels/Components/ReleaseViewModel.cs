@@ -377,13 +377,16 @@ namespace srb2_mod_management.ViewModels.Components
                 else
                 {
                     if (new[] {".zip", ".rar", ".7z"}.Any(ext => filepath.EndsWith(ext))
-                        && !Regex.Match(filepath, @"(part[_ +-.]?(?:0?[2-9]|1\d])|7z.\d?\d[1-9])",
+                        && !Regex.Match(filepath,
+                            @"(part[_ +-.]?(?:0?[2-9]|1\d])|7z.\d?\d[1-9]|\.[0-9]?(?:0[2-9]|[1-9][0-9])$)",
                             RegexOptions.IgnoreCase).Success)
                     {
                         using (var archive = ArchiveFactory.Open(filepath))
                             foreach (var entry in archive.Entries)
                                 if (!entry.IsDirectory)
                                 {
+                                    if (File.Exists(Path.Combine(path, entry.Key)))
+                                        continue;
                                     extractedFiles.Add(entry.Key);
                                     entry.WriteToDirectory(path,
                                         new ExtractionOptions {ExtractFullPath = true, Overwrite = true});
