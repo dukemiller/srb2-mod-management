@@ -311,7 +311,8 @@ namespace srb2_mod_management.Services
         public async Task Save()
         {
             using (var stream = new StreamWriter(SettingsPath))
-                await stream.WriteAsync(JsonConvert.SerializeObject(this, Formatting.Indented));
+                await stream.WriteAsync(JsonConvert.SerializeObject(this, Formatting.Indented,
+                    new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
         }
 
         public static ForumData Load()

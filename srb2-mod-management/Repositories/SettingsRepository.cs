@@ -30,7 +30,8 @@ namespace srb2_mod_management.Repositories
         public void Save()
         {
             using (var stream = new StreamWriter(SettingsPath))
-                stream.WriteAsync(JsonConvert.SerializeObject(this, Formatting.Indented));
+                stream.WriteAsync(JsonConvert.SerializeObject(this, Formatting.Indented, 
+                    new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
         }
 
         public static SettingsRepository Load()
