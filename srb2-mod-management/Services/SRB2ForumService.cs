@@ -189,13 +189,23 @@ namespace srb2_mod_management.Services
                     ? updateDate
                     : released;
 
-            var links = descriptionNode.SelectNodes(".//table[@cellspacing='3']/tr").Select(tr =>
-                new DownloadLink
-                {
-                    Filename = CleanString(tr.SelectSingleNode(".//a").InnerText),
-                    Size = CleanString(tr.SelectSingleNode(".//a").NextSibling.InnerText).Split(',')[0] + ")",
-                    Link = CleanUrl(tr.SelectSingleNode(".//a").Attributes["href"].Value)
-                }).ToList();
+            List<DownloadLink> links;
+
+            try
+            {
+                links = descriptionNode.SelectNodes(".//table[@cellspacing='3']/tr")?.Select(tr =>
+                    new DownloadLink
+                    {
+                        Filename = CleanString(tr.SelectSingleNode(".//a").InnerText),
+                        Size = CleanString(tr.SelectSingleNode(".//a").NextSibling.InnerText).Split(',')[0] + ")",
+                        Link = CleanUrl(tr.SelectSingleNode(".//a").Attributes["href"].Value)
+                    }).ToList() ?? new List<DownloadLink>();
+            }
+
+            catch
+            {
+                links = new List<DownloadLink>();
+            }
 
             return new Release
             {
