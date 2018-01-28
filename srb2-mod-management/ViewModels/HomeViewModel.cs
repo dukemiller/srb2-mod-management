@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -84,6 +85,9 @@ namespace srb2_mod_management.ViewModels
             Characters = _downloadedMods.Characters;
             Mods = _downloadedMods.Mods;
             Scripts = _downloadedMods.Scripts;
+
+            // Messages
+            MessengerInstance.Register<Mod>(this, StartSingle);
         }
 
         // 
@@ -170,33 +174,42 @@ namespace srb2_mod_management.ViewModels
         public string Version => "version " + string.Concat(Assembly.GetExecutingAssembly().GetName().Version.ToString().Reverse().Skip(2).Reverse());
 
         // 
+
+        private Process CreateSrb2Process(IEnumerable<Mod> mods)
+        {
+            var info = new ProcessStartInfo
+            {
+                WorkingDirectory = Options.GamePath,
+                FileName = Options.GameExe,
+                Arguments = Options.BuildArguments(mods),
+                CreateNoWindow = true
+            };
+
+            var process = new Process
+            {
+                StartInfo = info
+            };
+
+            return process;
+        }
+
+        private async void StartSingle(Mod mod)
+        {
+            Starting = true;
+            await Task.Run(() => CreateSrb2Process(new[] {mod}).Start());
+            await Task.Delay(3000);
+            Starting = false;
+        }
         
         private async void Start()
         {
             Starting = true;
-
             await Task.Run(() =>
             {
                 var mods = SelectedLevels.Concat(SelectedCharacters).Concat(SelectedMods).Concat(SelectedScripts);
-
-                var info = new ProcessStartInfo
-                {
-                    WorkingDirectory = Options.GamePath,
-                    FileName = Options.GameExe,
-                    Arguments = Options.BuildArguments(mods),
-                    CreateNoWindow = true
-                };
-
-                var process = new Process
-                {
-                    StartInfo = info
-                };
-
-                process.Start();
+                CreateSrb2Process(mods).Start();
             });
-
             await Task.Delay(3000);
-
             Starting = false;
         }
 

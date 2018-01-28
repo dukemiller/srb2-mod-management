@@ -41,7 +41,9 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Command="{Binding UpdateCommand}" Panel.ZIndex="1" HorizontalAlignment="Right" Content="Start update" >
+            <Button Command="{Binding UpdateCommand}" Panel.ZIndex="1" HorizontalAlignment="Right" Margin="10,0" 
+                    ToolTip="Update the mod, replacing the current existing values with the most recent."
+                    Content="Start update" >
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                         <Setter Property="Visibility">
@@ -76,7 +78,7 @@
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="9*" />
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
             <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="26"
                        Text="{Binding Release.Name}" />
@@ -88,6 +90,25 @@
                 <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding RefreshCommand}"
                         ToolTip="Attempt to update the information for the mod">
                     <iconPacks:PackIconModern Kind="Refresh" Width="25" Height="25" />
+                </Button>
+                <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding StandaloneCommand}"
+                        ToolTip="Launch mod by itself">
+                    <Button.Background>
+                        <SolidColorBrush Color="LightGreen" Opacity="0.2" />
+                    </Button.Background>
+                    <iconPacks:PackIconModern Kind="ControlPlay" Width="25" Height="25"  />
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Visibility">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource AAndBConverter}">
+                                        <Binding Path="Downloaded" />
+                                        <Binding Path="Available" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
                 </Button>
             </DockPanel>
         </Grid>

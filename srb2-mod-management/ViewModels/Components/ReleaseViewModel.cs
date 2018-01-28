@@ -22,6 +22,7 @@ using SharpCompress.Common;
 using SharpCompress.Compressors.Deflate;
 using SharpCompress.Writers;
 using SharpCompress.Writers.Zip;
+using srb2_mod_management.Enums;
 
 namespace srb2_mod_management.ViewModels.Components
 {
@@ -57,6 +58,11 @@ namespace srb2_mod_management.ViewModels.Components
             PreviousImageCommand = new RelayCommand(PreviousImage, () => !LoadingImage);
             NextImageCommand = new RelayCommand(NextImage, () => !LoadingImage);
             WebpageCommand = new RelayCommand(() => Process.Start(_model.ReleaseInfo.Url));
+            StandaloneCommand = new RelayCommand(() =>
+            {
+                MessengerInstance.Send(View.Home);
+                MessengerInstance.Send(Mod);
+            });
         }
         
         // 
@@ -264,6 +270,8 @@ namespace srb2_mod_management.ViewModels.Components
         public RelayCommand DownloadCommand { get; set; }
 
         public RelayCommand UpdateCommand { get; set; }
+
+        public RelayCommand StandaloneCommand { get; set; }
 
         public RelayCommand WebpageCommand { get; set; }
 
