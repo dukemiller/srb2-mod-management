@@ -119,9 +119,15 @@ namespace srb2_mod_management.ViewModels.Components
         /// </summary>
         private bool Retreivable()
         {
-            var containsFilteredWord = new[] {"md2", "launcher"}.Any(word => Release.Name.ToLower().Contains(word));
-            var containsFilteredChangedThing = new[] {"Models", "Additional Software"}.Any(changedThing => Release.ChangedThings.Contains(changedThing)) && !Release.Name.Contains("ArchPack");
-            return !containsFilteredWord && !containsFilteredChangedThing;
+            var hasDownloads = Release.Downloads.Count > 0;
+            var onWhiteList = new[] {"ArchPack", "MonitorsPlus"}
+                .Any(word => Release.Name.Contains(word));
+            var containsFilteredWord = new[] {"md2", "launcher"}
+                .Any(word => Release.Name.ToLower().Contains(word));
+            var containsFilteredChangedThing = new[] {"Models", "Additional Software"}
+                .Any(changedThing => Release.ChangedThings.Contains(changedThing));
+
+            return hasDownloads && (onWhiteList || (!containsFilteredWord && !containsFilteredChangedThing));
         }
 
         /// <summary>
