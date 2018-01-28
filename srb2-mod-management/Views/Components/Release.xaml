@@ -41,6 +41,20 @@
                     </Style>
                 </Button.Style>
             </Button>
+            <Button Command="{Binding UpdateCommand}" Panel.ZIndex="1" HorizontalAlignment="Right" Content="Start update" >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Visibility">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource AAndBConverter}">
+                                    <Binding Path="Downloaded" />
+                                    <Binding Path="UpdateAvailable" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Label FontSize="18"
                    VerticalAlignment="Center"
                    Opacity="0.4"

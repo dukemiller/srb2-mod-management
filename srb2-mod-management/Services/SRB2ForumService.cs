@@ -296,7 +296,14 @@ namespace srb2_mod_management.Services
             // Potentially old, update it
             if ((DateTime.Now - Releases[release.Url].Retrieved).Days > 30)
             {
-                Releases[release.Url] = await getRelease();
+                var updatedRelease = await getRelease();
+
+                // Check for any difference in the download links since last update
+                var sameDownloads = updatedRelease.Downloads.All(d1 => Releases[release.Url].Downloads.Any(d2 => Equals(d1, d2)));
+                if (!sameDownloads)
+                    updatedRelease.UpdateAvailable = true;
+
+                Releases[release.Url] = updatedRelease;
                 await Save();
             }
         }

@@ -49,6 +49,11 @@ namespace srb2_mod_management.Repositories.Interface
         Task Remove(Category category, Mod mod);
 
         /// <summary>
+        ///     Update all information about a given mod.
+        /// </summary>
+        Task Update(Category category, Mod mod);
+
+        /// <summary>
         ///     Retrieve the mod corresponding to a release or id (if downloaded).
         /// </summary>
         Mod Find(Category category, ReleaseInfo info);

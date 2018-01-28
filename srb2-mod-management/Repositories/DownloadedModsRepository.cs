@@ -47,6 +47,13 @@ namespace srb2_mod_management.Repositories
             await Save();
         }
 
+        public async Task Update(Category category, Mod mod)
+        {
+            var collection = GetCollectionForCategory(category);
+            collection[collection.IndexOf(collection.First(m => m.Id == mod.Id))] = mod;
+            await Save();
+        }
+
         public Mod Find(Category category, ReleaseInfo info) => GetCollectionForCategory(category).FirstOrDefault(mod => info.Id == mod.Id);
 
         public Mod Find(int id) => Levels.Concat(Characters).Concat(Mods).Concat(Scripts).FirstOrDefault(mod => mod.Id == id);

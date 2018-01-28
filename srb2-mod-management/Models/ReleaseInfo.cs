@@ -18,7 +18,7 @@ namespace srb2_mod_management.Models
 
         [JsonProperty("stars")]
         public int Stars { get; set; }
-
+        
         [JsonIgnore]
         public ObservableCollection<Star> StarCollection
         {

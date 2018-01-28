@@ -18,6 +18,9 @@ namespace srb2_mod_management.Models
         [JsonProperty("changed_things")]
         public List<string> ChangedThings { get; set; } = new List<string>();
 
+        [JsonProperty("update_available")]
+        public bool UpdateAvailable { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
