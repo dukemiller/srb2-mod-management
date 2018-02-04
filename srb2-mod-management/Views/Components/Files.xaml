@@ -5,19 +5,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:srb2_mod_management.Views.Components"
              xmlns:models="clr-namespace:srb2_mod_management.Models"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              Background="{StaticResource WindowBackgroundBrush}"
+             Foreground="{StaticResource TextBrush}"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance models:Mod}"
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel Margin="8">
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
-            All files that will be added when launching the game with this mod selected.
-            Generally you shouldn't have to mess with this, but in the case of language
-            packs / the author adding every versioned file into source / etc,
-            alter that selection here.
-        </TextBlock>
+        <DockPanel Dock="Top">
+            <Border DockPanel.Dock="Right" Focusable="False" CornerRadius="15" Width="35" Height="35">
+                <Border.ToolTip>
+                    <TextBlock>
+                        Generally you shouldn't have to mess with this, but in the case of language <LineBreak />
+                        packs / the author adding every versioned file into source / etc, <LineBreak />
+                        alter that selection here.
+                    </TextBlock>
+                </Border.ToolTip>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="#454545" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#555555" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <iconPacks:PackIconModern Kind="Question" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" />
+            </Border>
+            <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+                Files that are enabled on launch:
+            </TextBlock>
+        </DockPanel>
         <Separator DockPanel.Dock="Top" Margin="5,10" Opacity="0.4" />
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False">
             <ItemsControl ItemsSource="{Binding ModFiles}" Focusable="False">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
