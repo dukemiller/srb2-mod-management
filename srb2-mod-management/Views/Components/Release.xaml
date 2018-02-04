@@ -117,7 +117,7 @@
         <controls:MetroAnimatedSingleRowTabControl Margin="0,8">
             <controls:MetroTabItem Header="Description">
                 <DockPanel>
-                    <ScrollViewer DockPanel.Dock="Top" Margin="8">
+                    <ScrollViewer DockPanel.Dock="Top" Margin="8" Focusable="False">
                         <TextBlock TextWrapping="Wrap" FontSize="18" Text="{Binding Release.Description}" />
                     </ScrollViewer>
                 </DockPanel>
@@ -138,7 +138,10 @@
                             <iconPacks:PackIconFontAwesome Width="30" Height="25" Kind="ArrowCircleLeft" />
                         </Button>
                     </DockPanel>
-                    <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid>
+                        <controls:ProgressRing Visibility="{Binding LoadingImage, Converter={StaticResource BoolVisibilityReverseConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" Focusable="False" IsTabStop="False" />
+                        <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
                 </DockPanel>
             </controls:MetroTabItem>
             <controls:MetroTabItem Header="Files">
