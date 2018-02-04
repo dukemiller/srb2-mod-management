@@ -75,14 +75,8 @@
                 </Label.Style>
             </Label>
         </Grid>
-        <Grid DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="9*" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock FontWeight="Bold" Grid.ColumnSpan="2" TextWrapping="Wrap" FontSize="26"
-                       Text="{Binding Release.Name}" />
-            <DockPanel Grid.Column="1" LastChildFill="False">
+        <DockPanel DockPanel.Dock="Top" >
+            <DockPanel Dock="Right" Height="45" LastChildFill="False" >
                 <Button DockPanel.Dock="Right" Margin="5" Padding="5" Command="{Binding WebpageCommand}"
                         ToolTip="Open the mod's forum post">
                     <iconPacks:PackIconModern Kind="Page" Width="25" Height="25" />
@@ -111,7 +105,9 @@
                     </Button.Style>
                 </Button>
             </DockPanel>
-        </Grid>
+            <TextBlock FontWeight="Bold" TextWrapping="WrapWithOverflow" FontSize="26"
+                           Text="{Binding Release.Name}" />
+        </DockPanel>
         <TextBlock FontStyle="Italic" DockPanel.Dock="Top" TextWrapping="Wrap"
                    Text="{Binding Release.ChangedThings, Converter={StaticResource ListConverter}}" />
         <controls:MetroAnimatedSingleRowTabControl Margin="0,8">
