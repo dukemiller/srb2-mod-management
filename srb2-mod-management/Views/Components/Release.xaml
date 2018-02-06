@@ -135,7 +135,7 @@
                         </Button>
                     </DockPanel>
                     <Grid>
-                        <controls:ProgressRing Visibility="{Binding LoadingImage, Converter={StaticResource BoolVisibilityReverseConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" Focusable="False" IsTabStop="False" />
+                        <controls:ProgressRing Visibility="{Binding LoadingImage, Converter={StaticResource BoolVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" FocusVisualStyle="{x:Null}" Focusable="False" IsTabStop="False" />
                         <Image gif:AnimationBehavior.SourceUri="{Binding Image, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                 </DockPanel>

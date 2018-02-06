@@ -188,7 +188,7 @@ namespace srb2_mod_management.ViewModels.Components
             get => _loadingImage;
             set
             {
-                _loadingImage = value;
+                Set(() => LoadingImage, ref _loadingImage, value);
                 NextImageCommand.RaiseCanExecuteChanged();
                 PreviousImageCommand.RaiseCanExecuteChanged();
             }
