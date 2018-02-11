@@ -19,7 +19,6 @@ using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Ioc;
 using MahApps.Metro.Controls.Dialogs;
 using SharpCompress.Common;
-using SharpCompress.Compressors.Deflate;
 using SharpCompress.Writers;
 using SharpCompress.Writers.Zip;
 using srb2_mod_management.Enums;
@@ -389,7 +388,7 @@ namespace srb2_mod_management.ViewModels.Components
 
             // Download and extract
 
-            var (extractedFiles, successful) = await DownloadFiles(path);
+            var (extractedFiles, successful) = await DownloadAndExtractFiles(path);
 
             if (!successful)
                 return;
@@ -425,7 +424,7 @@ namespace srb2_mod_management.ViewModels.Components
         /// <summary>
         ///     Attempt to download the files of the current release
         /// </summary>
-        private async Task<(List<string> files, bool successful)> DownloadFiles(string path)
+        private async Task<(List<string> files, bool successful)> DownloadAndExtractFiles(string path)
         {
             var downloaded = new List<string>();
             var extractedFiles = new List<string>();
@@ -473,16 +472,38 @@ namespace srb2_mod_management.ViewModels.Components
                             @"(part[_ +-.]?(?:0?[2-9]|1\d])|7z.\d?\d[1-9]|\.[0-9]?(?:0[2-9]|[1-9][0-9])$)",
                             RegexOptions.IgnoreCase).Success)
                     {
-                        using (var archive = ArchiveFactory.Open(filepath))
-                            foreach (var entry in archive.Entries)
-                                if (!entry.IsDirectory)
-                                {
-                                    if (File.Exists(Path.Combine(path, entry.Key)))
-                                        continue;
-                                    extractedFiles.Add(entry.Key);
-                                    entry.WriteToDirectory(path,
-                                        new ExtractionOptions { ExtractFullPath = true, Overwrite = true });
-                                }
+                        try
+                        {
+                            using (var archive = ArchiveFactory.Open(filepath))
+                                foreach (var entry in archive.Entries)
+                                    if (!entry.IsDirectory)
+                                    {
+                                        if (File.Exists(Path.Combine(path, entry.Key)))
+                                            continue;
+                                        extractedFiles.Add(entry.Key);
+                                        entry.WriteToDirectory(path,
+                                            new ExtractionOptions {ExtractFullPath = true, Overwrite = true});
+                                    }
+                        }
+
+                        catch (InvalidOperationException)
+                        {
+                            // Remove the offending file
+                            File.Delete(filepath);
+
+                            // Display error
+                            var dialog = SimpleIoc.Default.GetInstance<IDialogCoordinator>();
+                            await dialog.ShowMessageAsync(this,
+                                "Extraction Error",
+                                "There was an issue extracting an archive associated with this mod. " +
+                                "This could be an issue with the archive being improperly downloaded, try and download again. " +
+                                "If the problem persists, this mod may require manual installation.");
+
+                            Downloaded = false;
+                            Downloading = false;
+                            RaisePropertyChanged(nameof(DownloadText));
+                            return (downloaded, false);
+                        }
                     }
 
                     File.Delete(filepath);
@@ -528,7 +549,7 @@ namespace srb2_mod_management.ViewModels.Components
 
             var path = Path.Combine(SettingsRepository.ApplicationDirectory, "mods",
                 _model.Category.ToString().ToLower());
-            var (extractedFiles, successful) = await DownloadFiles(path);
+            var (extractedFiles, successful) = await DownloadAndExtractFiles(path);
 
             if (!successful)
             {
