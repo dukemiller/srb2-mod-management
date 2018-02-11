@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,8 +30,9 @@ namespace srb2_mod_management.Services
 
         static Srb2ForumService()
         {
-            Client.DefaultRequestHeaders.Add("User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/46.0");
+            var version = "1.0.0";
+            try { version = Assembly.GetExecutingAssembly().GetName().Version.ToString(); } catch { }
+            Client.DefaultRequestHeaders.Add("User-Agent", $"srb2-mod-management/{version}");
         }
 
         public Srb2ForumService(IDownloadedModsRepository modsRepository)
