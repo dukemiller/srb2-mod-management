@@ -108,13 +108,18 @@ namespace srb2_mod_management.ViewModels.Components
         public async Task<ReleasesViewModel> SetModel(DiscoverModel model)
         {
             _model = model;
-            LoadingPage = true;
             PageNumber = 0;
+            await SetPageContent();
+            return this;
+        }
+
+        public async Task SetPageContent()
+        {
+            LoadingPage = true;
             Page = await _modService.RequestPage(_model.Category, PageNumber);
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LastPage = Page.Releases.Count < 20;
             LoadingPage = false;
-            return this;
         }
 
         private async void NextPage()

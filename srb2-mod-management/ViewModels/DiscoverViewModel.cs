@@ -46,7 +46,7 @@ namespace srb2_mod_management.ViewModels
 
         // 
 
-        private void Back()
+        private async void Back()
         {
             if (_views.Count > 0)
             {
@@ -56,16 +56,17 @@ namespace srb2_mod_management.ViewModels
                     case ComponentView.Categories:
                         MessengerInstance.Send(View.Home);
                         break;
-                    case ComponentView.Release:
-                        var releases = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
-                        releases.LoadingPage = false;
-                        Display = releases;
-                        break;
                     case ComponentView.Releases:
                         var categories = SimpleIoc.Default.GetInstance<CategoriesViewModel>();
                         categories.Loading = false;
                         Display = categories;
                         break;
+                    case ComponentView.Release:
+                        var releases = SimpleIoc.Default.GetInstance<ReleasesViewModel>();
+                        await releases.SetPageContent();
+                        Display = releases;
+                        break;
+                    
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
