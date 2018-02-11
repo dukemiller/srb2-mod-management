@@ -5,6 +5,9 @@ using Category = srb2_mod_management.Enums.Category;
 
 namespace srb2_mod_management.Repositories.Interface
 {
+    /// <summary>
+    ///     A container of the downloaded mods for the user.
+    /// </summary>
     public interface IDownloadedModsRepository
     {
 
@@ -54,9 +57,13 @@ namespace srb2_mod_management.Repositories.Interface
         Task Update(Category category, Mod mod);
 
         /// <summary>
-        ///     Retrieve the mod corresponding to a release or id (if downloaded).
+        ///     Retrieve the mod corresponding to a release (if downloaded).
         /// </summary>
         Mod Find(Category category, ReleaseInfo info);
+
+        /// <summary>
+        ///     Retrieve the mod corresponding to a id (if downloaded).
+        /// </summary>
         Mod Find(int id);
 
         /// <summary>

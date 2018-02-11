@@ -2,6 +2,9 @@
 
 namespace srb2_mod_management.Repositories.Interface
 {
+    /// <summary>
+    ///     A container of the settings for the user.
+    /// </summary>
     public interface ISettingsRepository
     {
         /// <summary>

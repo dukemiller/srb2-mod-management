@@ -69,7 +69,7 @@ namespace srb2_mod_management.ViewModels.Components
         public async Task<ReleaseViewModel> SetModel(DiscoverModel model)
         {
             _model = model;
-            Release = await _modService.RetrieveRelease(_model.ReleaseInfo);
+            Release = await _modService.RequestRelease(_model.ReleaseInfo);
             Downloaded = _downloadedMods.Contains(_model.Category, Release);
 
             // Set download information
@@ -111,7 +111,7 @@ namespace srb2_mod_management.ViewModels.Components
             if (_model.Refresh)
             {
                 await _modService.UpdateRelease(_model.ReleaseInfo);
-                Release = await _modService.RetrieveRelease(_model.ReleaseInfo);
+                Release = await _modService.RequestRelease(_model.ReleaseInfo);
                 Downloaded = _downloadedMods.Contains(_model.Category, Release);
             }
 
@@ -525,7 +525,7 @@ namespace srb2_mod_management.ViewModels.Components
         private async void Refresh()
         {
             await _modService.UpdateRelease(_model.ReleaseInfo);
-            Release = await _modService.RetrieveRelease(_model.ReleaseInfo);
+            Release = await _modService.RequestRelease(_model.ReleaseInfo);
             await SetInformation();
         }
 

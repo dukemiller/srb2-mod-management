@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     A single page (usually represented as a forum page) of ReleaseInfos.
+    /// </summary>
     public class Page
     {
         [JsonProperty("release_descriptions")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using srb2_mod_management.ViewModels.Components;
 
 namespace srb2_mod_management.Views.Components

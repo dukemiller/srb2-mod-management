@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     Meta information about a release, retrieved from a listing source.
+    /// </summary>
     public class ReleaseInfo
     {
         [JsonProperty("id")]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -111,7 +110,7 @@ namespace srb2_mod_management.ViewModels.Components
             _model = model;
             LoadingPage = true;
             PageNumber = 0;
-            Page = await _modService.RetrievePage(_model.Category, PageNumber);
+            Page = await _modService.RequestPage(_model.Category, PageNumber);
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LastPage = Page.Releases.Count < 20;
             LoadingPage = false;
@@ -122,7 +121,7 @@ namespace srb2_mod_management.ViewModels.Components
         {
             LoadingPage = true;
             PageNumber = Math.Min(PageNumber + 1, 9);
-            Page = await _modService.RetrievePage(_model.Category, PageNumber);
+            Page = await _modService.RequestPage(_model.Category, PageNumber);
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LastPage = Page.Releases.Count < 20;
             LoadingPage = false;
@@ -132,7 +131,7 @@ namespace srb2_mod_management.ViewModels.Components
         {
             LoadingPage = true;
             PageNumber = Math.Max(PageNumber - 1, 0);
-            Page = await _modService.RetrievePage(_model.Category, PageNumber);
+            Page = await _modService.RequestPage(_model.Category, PageNumber);
             LastPage = Page.Releases.Count < 20;
             Releases = new ObservableCollection<ReleaseInfo>(Page.Releases);
             LoadingPage = false;

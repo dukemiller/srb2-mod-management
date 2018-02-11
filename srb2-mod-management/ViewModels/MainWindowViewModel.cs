@@ -34,18 +34,27 @@ namespace srb2_mod_management.ViewModels
 
         public RelayCommand GoHomeCommand { get; set; }
 
+        /// <summary>
+        ///     Whether or not the settings sidepane is open.
+        /// </summary>
         public bool SettingsIsOpen
         {
             get => _settingsIsOpen;
             set => Set(() => SettingsIsOpen, ref _settingsIsOpen, value);
         }
 
+        /// <summary>
+        ///     The current given display.
+        /// </summary>
         public ViewModelBase Display
         {
             get => _display;
             set => Set(() => Display, ref _display, value);
         }
 
+        /// <summary>
+        ///     Whether or not the view is on the home view.
+        /// </summary>
         public bool IsHome
         {
             get => _isHome;

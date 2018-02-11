@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     A fully qualified profile of a mod.
+    /// </summary>
     public class Release
     {
         [JsonProperty("id")]

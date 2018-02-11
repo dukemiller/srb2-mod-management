@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     A download url for a resource in a given release.
+    /// </summary>
     public class DownloadLink: IEquatable<DownloadLink>
     {
         [JsonProperty("filename")]

@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     The entire mod for srb2, encompassing details about itself and the files that it uses to work.
+    /// </summary>
     [Serializable]
     public class Mod: ObservableObject
     {

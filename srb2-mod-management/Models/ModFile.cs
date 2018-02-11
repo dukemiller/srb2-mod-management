@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace srb2_mod_management.Models
 {
+    /// <summary>
+    ///     A file that's associated with a Mod.
+    /// </summary>
     [Serializable]
     public class ModFile : ObservableObject
     {

@@ -41,7 +41,7 @@ namespace srb2_mod_management.Services
 
         // 
 
-        public async Task<Page> RetrievePage(Category category, int page)
+        public async Task<Page> RequestPage(Category category, int page)
         {
             var retrievedPage = await _data.FindPage(category, page, () => GetPage(category, page));
             foreach(var release in retrievedPage.Releases)
@@ -49,7 +49,7 @@ namespace srb2_mod_management.Services
             return retrievedPage;
         }
 
-        public async Task<Release> RetrieveRelease(ReleaseInfo release)
+        public async Task<Release> RequestRelease(ReleaseInfo release)
         {
             return await _data.FindRelease(release.Url, () => GetRelease(release.Url));
         }

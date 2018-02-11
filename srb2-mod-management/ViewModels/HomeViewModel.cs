@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -110,6 +109,9 @@ namespace srb2_mod_management.ViewModels
 
         public System.Action DeselectRequest { get; set; }
 
+        /// <summary>
+        ///     The tab panes index for retreiving a collection.
+        /// </summary>
         public int Index
         {
             get => _index;
