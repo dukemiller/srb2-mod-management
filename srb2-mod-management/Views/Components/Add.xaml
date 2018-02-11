@@ -61,7 +61,7 @@
             <Label Content="Files: " VerticalAlignment="Center" />
         </DockPanel>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,5">
-            <ListBox ItemsSource="{Binding Mod.Files}"
+            <ListBox ItemsSource="{Binding Mod.Files, UpdateSourceTrigger=PropertyChanged}"
                      SelectedItem="{Binding SelectedModFile}"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch">

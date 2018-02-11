@@ -77,7 +77,11 @@ namespace srb2_mod_management.ViewModels.Components
         public string ChangedThings
         {
             get => _changedThings;
-            set => Set(() => ChangedThings, ref _changedThings, value);
+            set
+            {
+                Set(() => ChangedThings, ref _changedThings, value);
+                AddCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public ModFile SelectedModFile
@@ -89,7 +93,11 @@ namespace srb2_mod_management.ViewModels.Components
         public Category SelectedCategory
         {
             get => _selectedCategory;
-            set => Set(() => SelectedCategory, ref _selectedCategory, value);
+            set
+            {
+                Set(() => SelectedCategory, ref _selectedCategory, value);
+                AddCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public Mod Mod
