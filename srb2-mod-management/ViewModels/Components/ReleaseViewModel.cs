@@ -496,8 +496,9 @@ namespace srb2_mod_management.ViewModels.Components
                             await dialog.ShowMessageAsync(this,
                                 "Extraction Error",
                                 "There was an issue extracting an archive associated with this mod. " +
-                                "This could be an issue with the archive being improperly downloaded, try and download again. " +
-                                "If the problem persists, this mod may require manual installation.");
+                                "This could be an issue with the archive being created improperly or " +
+                                "a problem happened while downloading. " +
+                                "Re-download and try again, if the problem persists this mod may require manual installation.");
 
                             Downloaded = false;
                             Downloading = false;
