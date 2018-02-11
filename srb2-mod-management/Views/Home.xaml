@@ -52,21 +52,25 @@
             <controls:MetroAnimatedSingleRowTabControl SelectedIndex="{Binding Index}">
                 <controls:MetroTabItem Header="Levels">
                     <ListBox ItemsSource="{Binding Levels}"
+                             SelectionMode="Multiple"
                              SelectionChanged="LevelsListBox_OnSelectionChanged"
                              Name="LevelsListBox" />
                 </controls:MetroTabItem>
                 <controls:MetroTabItem Header="Characters">
                     <ListBox ItemsSource="{Binding Characters}"
+                             SelectionMode="Multiple"
                              SelectionChanged="CharactersListBox_OnSelectionChanged"
                              Name="CharactersListBox" />
                 </controls:MetroTabItem>
                 <controls:MetroTabItem Header="Scripts">
                     <ListBox ItemsSource="{Binding Scripts}"
+                             SelectionMode="Multiple"
                              SelectionChanged="ScriptsListBox_OnSelectionChanged"
                              Name="ScriptsListBox" />
                 </controls:MetroTabItem>
                 <controls:MetroTabItem Header="Full mods">
                     <ListBox ItemsSource="{Binding Mods}"
+                             SelectionMode="Multiple"
                              SelectionChanged="ModsListBox_OnSelectionChanged"
                              Name="ModsListBox" />
                 </controls:MetroTabItem>
