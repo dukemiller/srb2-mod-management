@@ -61,6 +61,7 @@ namespace srb2_mod_management.ViewModels
             DeleteCommand = new RelayCommand(Delete);
             HighlightCommand = new RelayCommand(Highlight);
             OpenProfileCommand = new RelayCommand(OpenProfile);
+            OpenFileBrowserCommand = new RelayCommand(OpenFileBrowser);
             DeselectCommand = new RelayCommand(() =>
             {
                 DeselectRequest?.Invoke();
@@ -92,6 +93,8 @@ namespace srb2_mod_management.ViewModels
         // 
 
         public RelayCommand OpenSettingsCommand { get; set; }
+
+        public RelayCommand OpenFileBrowserCommand { get; set; }
 
         public RelayCommand AddModsCommand { get; set; }
 
@@ -262,6 +265,14 @@ namespace srb2_mod_management.ViewModels
             
             MessengerInstance.Send(View.Discover);
             MessengerInstance.Send(model);
+        }
+
+        private void OpenFileBrowser()
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog { Multiselect = false, CheckFileExists = true, CheckPathExists = true, Filter=".exe files (*.exe)|*.exe"};
+            var result = dlg.ShowDialog();
+            if (result == true)
+                _settings.Options.GameExe = dlg.FileName;
         }
     }
 }
