@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using srb2_mod_management.Enums;
@@ -36,7 +38,9 @@ namespace srb2_mod_management.ViewModels
         private int _index;
 
         private GameOptions _options;
-        
+
+        private bool _pathValid;
+
         // 
 
         public HomeViewModel(ISettingsRepository settings, IDownloadedModsRepository downloadedMods, IModRetreiverService modService)
@@ -57,26 +61,23 @@ namespace srb2_mod_management.ViewModels
                 MessengerInstance.Send(View.Discover);
                 MessengerInstance.Send(ComponentView.Add);
             });
-            StartCommand = new RelayCommand(Start, () => _settings.PathValid() && !Starting);
+            StartCommand = new RelayCommand(Start, () => PathValid && !Starting);
             DeleteCommand = new RelayCommand(Delete);
             HighlightCommand = new RelayCommand(Highlight);
             OpenProfileCommand = new RelayCommand(OpenProfile);
             OpenFileBrowserCommand = new RelayCommand(OpenFileBrowser);
-            DeselectCommand = new RelayCommand(() =>
-            {
-                DeselectRequest?.Invoke();
-                SelectedCharacters = new ObservableCollection<Mod>();
-                SelectedMods = new ObservableCollection<Mod>();
-                SelectedLevels = new ObservableCollection<Mod>();
-                SelectedScripts = new ObservableCollection<Mod>();
-                RaisePropertyChanged(nameof(SelectedItems));
-            });
+            DeselectCommand = new RelayCommand(Deselect);
 
+            PathValid = _settings.PathValid();
             Options = _settings.Options;
             Options.PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName == "GameExe")
+                {
+                    PathValid = _settings.PathValid();
                     StartCommand.RaiseCanExecuteChanged();
+                }
+
                 _settings.Save();
             };
             
@@ -132,6 +133,12 @@ namespace srb2_mod_management.ViewModels
                 Set(() => Starting, ref _starting, value);
                 StartCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        public bool PathValid
+        {
+            get => _pathValid;
+            set => Set(() => PathValid, ref _pathValid, value);
         }
 
         public ObservableCollection<Mod> Levels
@@ -200,6 +207,9 @@ namespace srb2_mod_management.ViewModels
 
         private async void StartSingle(Mod mod)
         {
+            if (!PathValid)
+                return;
+
             Starting = true;
             await Task.Run(() => CreateSrb2Process(new[] {mod}).Start());
             await Task.Delay(3000);
@@ -273,6 +283,16 @@ namespace srb2_mod_management.ViewModels
             var result = dlg.ShowDialog();
             if (result == true)
                 _settings.Options.GameExe = dlg.FileName;
+        }
+
+        private void Deselect()
+        {
+            DeselectRequest?.Invoke();
+            SelectedCharacters = new ObservableCollection<Mod>();
+            SelectedMods = new ObservableCollection<Mod>();
+            SelectedLevels = new ObservableCollection<Mod>();
+            SelectedScripts = new ObservableCollection<Mod>();
+            RaisePropertyChanged(nameof(SelectedItems));
         }
     }
 }

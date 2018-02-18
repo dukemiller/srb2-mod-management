@@ -6,55 +6,77 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d"
              DataContext="{Binding Source={StaticResource Locator}, Path=Home}"
+             Name="SettingsPane"
              Margin="4"
              TextElement.FontSize="22"
              d:DesignHeight="500"
              Width="400">
     <DockPanel LastChildFill="False" DataContext="{Binding Options}">
         <Label DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Center" Opacity="0.4" Content="{Binding Source={StaticResource Locator}, Path=Home.Version}"/>
-        <Label FontWeight="DemiBold" DockPanel.Dock="Top" VerticalAlignment="Center">SRB2 exe path</Label>
+        <Label FontWeight="DemiBold" DockPanel.Dock="Top" VerticalAlignment="Center">Path to SRB2 executable: </Label>
         <DockPanel Dock="Top">
             <Button DockPanel.Dock="Right" BorderThickness="0" Focusable="False" Background="#453737" 
                     ToolTip="Browse for file ..."
                     Command="{Binding Source={StaticResource Locator}, Path=Home.OpenFileBrowserCommand}">
                 <iconPacks:PackIconModern Kind="Folder" />
             </Button>
-            <TextBox Text="{Binding GameExe, UpdateSourceTrigger=PropertyChanged, Delay=800}" Margin="5,0"
-                     VerticalAlignment="Center" FontSize="18" />
+            <TextBox Text="{Binding GameExe, UpdateSourceTrigger=PropertyChanged, Delay=200}" 
+                     Margin="5,0"
+                     Padding="4"
+                     VerticalAlignment="Center" FontSize="18">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Background" Value="#2B2B2B" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=SettingsPane, Path=DataContext.PathValid}"  Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard x:Name="buttonAnimation" Storyboard="{StaticResource Flashing}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="buttonAnimation"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
         </DockPanel>
         
         <Separator DockPanel.Dock="Top" Opacity="0" Margin="0,5"/>
 
-        <Label DockPanel.Dock="Top" Content="General" FontWeight="DemiBold"/>
+        <DockPanel IsEnabled="{Binding ElementName=SettingsPane, Path=DataContext.PathValid}">
 
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding SkipIntro, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
-            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Skip intro on startup</Label>
-        </CheckBox>
+            <Label DockPanel.Dock="Top" Content="General" FontWeight="DemiBold"/>
 
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding UltimateMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
-            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Ultimate mode</Label>
-        </CheckBox>
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding SkipIntro, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+                <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Skip intro on startup</Label>
+            </CheckBox>
 
-        <Label DockPanel.Dock="Top" Content="Video" FontWeight="DemiBold"/>
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding UltimateMode, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+                <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Ultimate mode</Label>
+            </CheckBox>
 
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding OpenGl, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
-            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Use OpenGL (Recommended)</Label>
-        </CheckBox>
+            <Label DockPanel.Dock="Top" Content="Video" FontWeight="DemiBold"/>
 
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
-            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Windowed</Label>
-        </CheckBox>
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding OpenGl, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+                <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Use OpenGL (Recommended)</Label>
+            </CheckBox>
 
-        <Label DockPanel.Dock="Top" Content="Audio" FontWeight="DemiBold"/>
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding Windowed, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+                <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Windowed</Label>
+            </CheckBox>
 
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoMusic, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
-            <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable music</Label>
-        </CheckBox>
+            <Label DockPanel.Dock="Top" Content="Audio" FontWeight="DemiBold"/>
+
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoMusic, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+                <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable music</Label>
+            </CheckBox>
         
-        <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoSound, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
+            <CheckBox Margin="5,0,0,0" IsChecked="{Binding NoSound, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top">
             <Label Margin="0,-2,0,0" VerticalAlignment="Center" FontSize="22">Disable sound</Label>
         </CheckBox>
         
+        </DockPanel>
 
     </DockPanel>
 </UserControl>

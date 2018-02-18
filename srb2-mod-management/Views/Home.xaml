@@ -36,7 +36,22 @@
             <Button Content="Launch game" Command="{Binding StartCommand}"  Background="Green" />
             <Button Command="{Binding FindModsCommand}" Margin="5,0" Content="Get more mods" />
             <Button Command="{Binding AddModsCommand}" Content="Add local mod" />
-            <Button Command="{Binding OpenSettingsCommand}" DockPanel.Dock="Right" Content="Settings" />
+            <Button Command="{Binding OpenSettingsCommand}" DockPanel.Dock="Right" Content="Settings" >
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PathValid}" Value="False">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard x:Name="buttonAnimation" Storyboard="{StaticResource Flashing}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="buttonAnimation"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
             <Button Command="{Binding DeselectCommand}" Margin="0,0,5,0"  DockPanel.Dock="Right" Content="Deselect all" />
         </DockPanel>
         <Separator DockPanel.Dock="Bottom" Margin="0,5" />

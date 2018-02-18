@@ -40,6 +40,14 @@
                                  To="1.0" />
             </Storyboard>
 
+            <Storyboard x:Key="Flashing" BeginTime="00:00:00" 
+                        AutoReverse="True"
+                        RepeatBehavior="Forever"
+                        DesiredFrameRate="30"
+                        Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)">
+                <ColorAnimation From="#2F2F2F" To="#536161" Duration="0:0:1.2"/>
+            </Storyboard>
+
             <DataTemplate DataType="{x:Type models:Mod}">
                 <components:Mod DataContext="{Binding}"/>
             </DataTemplate>

@@ -143,6 +143,7 @@ namespace srb2_mod_management.ViewModels
         /// </summary>
         private async void HandleProfile(ProfileModel profile)
         {
+
             var model = new DiscoverModel
             {
                 RequestedView = ComponentView.Release,
