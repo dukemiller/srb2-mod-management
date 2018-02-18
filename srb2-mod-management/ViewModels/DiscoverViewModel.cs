@@ -184,12 +184,13 @@ namespace srb2_mod_management.ViewModels
         /// <summary>
         ///     Received a direct view change, global view request change, set progressable states to default
         /// </summary>
-        private static void HandleView(View view)
+        private void HandleView(View view)
         {
             // Remove any loading states
             switch (view)
             {
                 case View.Home:
+                    _views.Clear();
                     SimpleIoc.Default.GetInstance<CategoriesViewModel>().Loading = false;
                     SimpleIoc.Default.GetInstance<ReleasesViewModel>().LoadingPage = false;
                     break;
