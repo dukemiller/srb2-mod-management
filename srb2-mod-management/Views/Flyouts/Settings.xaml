@@ -44,7 +44,7 @@
         
         <Separator DockPanel.Dock="Top" Opacity="0" Margin="0,5"/>
 
-        <DockPanel IsEnabled="{Binding ElementName=SettingsPane, Path=DataContext.PathValid}">
+        <DockPanel IsEnabled="{Binding ElementName=SettingsPane, Path=DataContext.PathValid}" LastChildFill="False">
 
             <Label DockPanel.Dock="Top" Content="General" FontWeight="DemiBold"/>
 
