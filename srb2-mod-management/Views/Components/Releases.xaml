@@ -46,7 +46,7 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="4*" Binding="{Binding Name}" Header="Name" />
-                <DataGridTemplateColumn Width="90" Header="Stars" SortMemberPath="Stars">
+                <DataGridTemplateColumn Width="90" Header="Stars" SortMemberPath="Rating">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ItemsControl ItemsSource="{Binding StarCollection}">

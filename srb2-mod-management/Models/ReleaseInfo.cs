@@ -19,16 +19,16 @@ namespace srb2_mod_management.Models
         [JsonProperty("url")]
         public string Url { get; set; }
 
-        [JsonProperty("stars")]
-        public int Stars { get; set; }
-        
+        [JsonProperty("rating")]
+        public double Rating { get; set; } = -1;
+
         [JsonIgnore]
         public ObservableCollection<Star> StarCollection
         {
             get
             {
                 var stars = new ObservableCollection<Star>();
-                foreach (var _ in Enumerable.Range(0, Stars))
+                foreach (var _ in Enumerable.Range(0, (int) Math.Round(Rating)))
                     stars.Add(new Star());
                 return stars;
             }

@@ -141,17 +141,17 @@ namespace srb2_mod_management.Services
 
             var url = CleanUrl(node.SelectSingleNode(".//a[contains(@href, 'showthread')]").Attributes["href"].Value);
             var id = int.Parse(url.Split('=').Last());
-            var starNode = node.SelectSingleNode(".//img[contains(@src, 'rating')]");
-            var stars = starNode == null
+            var ratingNode = node.SelectSingleNode(".//img[contains(@src, 'rating')]");
+            var rating = ratingNode == null
                 ? 0
-                : int.Parse(Regex.Match(starNode.Attributes["src"].Value, "([1-5])").Groups[1].Value);
+                : double.Parse(Regex.Match(ratingNode.Attributes["alt"].Value, @"([0-5]\.\d+) average").Groups[1].Value);
 
             return new ReleaseInfo
             {
                 Id = id,
                 LastReply = date,
                 Name = name,
-                Stars = stars,
+                Rating = rating,
                 Url = url,
                 Views = views
             };
@@ -274,7 +274,7 @@ namespace srb2_mod_management.Services
 
             var data = Pages[key][page];
 
-            if (data.Releases.Count == 0 || (DateTime.Now  - data.LastChecked).Days > 14)
+            if (data.Releases.Count == 0 || (DateTime.Now  - data.LastChecked).Days > 14 || data.Releases.Any(release => release.Rating < 0))
             {
                 Pages[key][page] = await getPage();
                 Pages[key][page].LastChecked = DateTime.Now;
@@ -324,7 +324,7 @@ namespace srb2_mod_management.Services
         {
             using (var stream = new StreamWriter(SettingsPath))
                 await stream.WriteAsync(JsonConvert.SerializeObject(this, Formatting.Indented,
-                    new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
+                    new JsonSerializerSettings()));
         }
 
         public static ForumData Load()
