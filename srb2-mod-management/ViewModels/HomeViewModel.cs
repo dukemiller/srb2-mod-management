@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using srb2_mod_management.Enums;
@@ -55,7 +54,7 @@ namespace srb2_mod_management.ViewModels
             {
                 MessengerInstance.Send(View.Discover);
                 MessengerInstance.Send(ComponentView.Categories);
-            });
+            }, () => PathValid);
             AddModsCommand = new RelayCommand(() =>
             {
                 MessengerInstance.Send(View.Discover);
@@ -76,16 +75,14 @@ namespace srb2_mod_management.ViewModels
                 {
                     PathValid = _settings.PathValid();
                     StartCommand.RaiseCanExecuteChanged();
+                    FindModsCommand.RaiseCanExecuteChanged();
                 }
-
+                ;
                 _settings.Save();
             };
             
             // Lists
-            Levels = _downloadedMods.Levels;
-            Characters = _downloadedMods.Characters;
-            Mods = _downloadedMods.Mods;
-            Scripts = _downloadedMods.Scripts;
+            LoadCollections();
 
             // Messages
             MessengerInstance.Register<Mod>(this, StartSingle);
@@ -293,6 +290,15 @@ namespace srb2_mod_management.ViewModels
             SelectedLevels = new ObservableCollection<Mod>();
             SelectedScripts = new ObservableCollection<Mod>();
             RaisePropertyChanged(nameof(SelectedItems));
+        }
+
+        private async void LoadCollections()
+        {
+            await _downloadedMods.Validate();
+            Levels = _downloadedMods.Levels;
+            Characters = _downloadedMods.Characters;
+            Mods = _downloadedMods.Mods;
+            Scripts = _downloadedMods.Scripts;
         }
     }
 }

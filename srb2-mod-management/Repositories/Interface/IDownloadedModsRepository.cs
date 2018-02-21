@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using srb2_mod_management.Models;
 using Category = srb2_mod_management.Enums.Category;
@@ -70,5 +71,11 @@ namespace srb2_mod_management.Repositories.Interface
         ///     Save to disk.
         /// </summary>
         Task Save();
+
+        /// <summary>
+        ///     Validate that all the files in every downloaded mod exists on disk.
+        ///     If they don't, default behavior is to remove that mod from the repository.
+        /// </summary>
+        Task Validate();
     }
 }

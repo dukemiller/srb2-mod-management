@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -88,6 +89,24 @@ namespace srb2_mod_management.Repositories
                     return JsonConvert.DeserializeObject<DownloadedModsRepository>(stream.ReadToEnd());
 
             return new DownloadedModsRepository();
+        }
+
+        public async Task Validate()
+        {
+            var changesMade = false;
+            foreach (Category category in Enum.GetValues(typeof(Category)))
+            foreach (var mod in GetCollectionForCategory(category).ToList())
+            foreach (var file in mod.Files)
+                if (!File.Exists(file.Path))
+                {
+                    if (!changesMade)
+                        changesMade = true;
+                    await Remove(category, mod);
+                    break;
+                }
+
+            if (changesMade)
+                await Save();
         }
     }
 }

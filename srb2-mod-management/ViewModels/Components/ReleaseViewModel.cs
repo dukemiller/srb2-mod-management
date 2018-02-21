@@ -30,6 +30,7 @@ namespace srb2_mod_management.ViewModels.Components
         private static readonly WebClient Downloader = new WebClient();
         private readonly IModRetreiverService _modService;
         private readonly IDownloadedModsRepository _downloadedMods;
+        private readonly ISettingsRepository _settingsRepository;
         private static string ImageFolder => Path.Combine(SettingsRepository.ApplicationDirectory, "images");
         private DiscoverModel _model;
         private Release _release;
@@ -46,10 +47,11 @@ namespace srb2_mod_management.ViewModels.Components
 
         // 
 
-        public ReleaseViewModel(IModRetreiverService modService, IDownloadedModsRepository downloadedMods)
+        public ReleaseViewModel(IModRetreiverService modService, IDownloadedModsRepository downloadedMods, ISettingsRepository settingsRepository)
         {
             _modService = modService;
             _downloadedMods = downloadedMods;
+            _settingsRepository = settingsRepository;
 
             DownloadCommand = new RelayCommand(Download, CanDownload);
             RefreshCommand = new RelayCommand(Refresh);
@@ -380,7 +382,7 @@ namespace srb2_mod_management.ViewModels.Components
 
             // Create necessary paths
 
-            var path = Path.Combine(SettingsRepository.ApplicationDirectory, "mods",
+            var path = Path.Combine(_settingsRepository.Options.GamePath, "Mods",
                 _model.Category.ToString().ToLower());
 
             if (!Directory.Exists(path))
