@@ -114,7 +114,7 @@ namespace srb2_mod_management.Models
             var command = string.Join(" ",
                 mods.SelectMany(mod => mod.Files)
                     .Where(file => !file.Disabled && file.IsModFile)
-                    .Select(file => file.Path)
+                    .Select(file => $"\"{file.Path}\"")
                     .Distinct()
             );
 
