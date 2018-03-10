@@ -108,7 +108,7 @@ namespace srb2_mod_management.Services
         private static DateTime ParseCustomReplyTime(string text)
         {
             var format = text.Split(' ');
-            var (amount, quantifier) = (int.TryParse(format[0], out var number) ? number : 0, format[1].ToLower());
+            var (amount, quantifier) = (int.TryParse(format.FirstOrDefault(), out var number) ? number : 0, format.Skip(1).FirstOrDefault()?.ToLower());
             var date = DateTime.Now;
             switch (quantifier)
             {
@@ -137,15 +137,18 @@ namespace srb2_mod_management.Services
             var date = dateText == null
                 ? DateTime.Now
                 : (dateText.Contains("Ago")
-                        ? ParseCustomReplyTime(dateText)
-                        : DateTime.Parse(dateText));
+                    ? ParseCustomReplyTime(dateText)
+                    : DateTime.TryParseExact(dateText,
+                            "MM-dd-yyyy",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.None,
+                         out var dateTime)
+                        ? dateTime
+                        : DateTime.Now);
 
+            var rating = ParseRating(node.SelectSingleNode(".//img[contains(@src, 'rating')]"));
             var url = CleanUrl(node.SelectSingleNode(".//a[contains(@href, 'showthread')]").Attributes["href"].Value);
             var id = int.Parse(url.Split('=').Last());
-            var ratingNode = node.SelectSingleNode(".//img[contains(@src, 'rating')]");
-            var rating = ratingNode == null
-                ? 0
-                : double.Parse(Regex.Match(ratingNode.Attributes["alt"].Value, @"([0-5]\.\d+) average").Groups[1].Value);
 
             return new ReleaseInfo
             {
@@ -156,6 +159,21 @@ namespace srb2_mod_management.Services
                 Url = url,
                 Views = views
             };
+        }
+
+        private static double ParseRating(HtmlNode node)
+        {
+            if (node == null)
+                return 0.0;
+
+            var ratingRegex = Regex.Match(node.Attributes["alt"].Value, @"([0-5]\.\d+) average");
+
+            if (!ratingRegex.Success)
+                return 0.0;
+
+            return double.TryParse(ratingRegex.Groups[1].Value, out var value)
+                ? value
+                : 0.0;
         }
         
         private static Release ToRelease(string url, HtmlNode node)
@@ -171,12 +189,18 @@ namespace srb2_mod_management.Services
             var description = CleanString(descriptionNode
                 .SelectSingleNode(".//div[contains(@id, 'post_message')]")
                 .InnerText);
-
-            var released = DateTime.Parse(
-                node.SelectNodes(".//td[@class='alt2']")
-                    .Skip(3).First()
-                    .SelectSingleNode(".//strong/following-sibling::text()").InnerText.Split(' ')[1]
-            );
+          
+            var released =
+                DateTime.TryParseExact(
+                    node.SelectNodes(".//td[@class='alt2']")
+                        .Skip(3).First()
+                        .SelectSingleNode(".//strong/following-sibling::text()").InnerText.Split(' ')[1],
+                    "MM-dd-yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var result)
+                ? result
+                : DateTime.Now;
 
             var screenshots = node
                 .SelectNodes(".//img[@class='thumbnail' or boolean(@onload)]")
@@ -188,7 +212,7 @@ namespace srb2_mod_management.Services
             var updateText = node.SelectSingleNode(".//table/tr[2]/td[2]/strong/following-sibling::text()").InnerText.Split(' ')[1];
             var updated = updateText.ToLower() == "never"
                 ? released
-                : DateTime.TryParse(updateText, out var updateDate)
+                : DateTime.TryParseExact(updateText, "MM-dd-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var updateDate)
                     ? updateDate
                     : released;
 
