@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -110,8 +112,43 @@ namespace srb2_mod_management.ViewModels
                 _views.Push(discover.RequestedView);
             }
 
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
+                
+                // Display error
+                var dialog = SimpleIoc.Default.GetInstance<IDialogCoordinator>();
+
+                if (ex is HttpRequestException)
+                {
+                    await dialog.ShowMessageAsync(this,
+                        "Network Error",
+                        "A network error occured while trying to complete this action. " +
+                        "Ensure you're properly connected with no firewall blocking this application and try again. " +
+                        "If the problem persists, it may be a server issue.");
+                }
+
+                else if (ex is TaskCanceledException)
+                {
+                    await dialog.ShowMessageAsync(this,
+                        "Timeout error",
+                        "The connection to the server timed out while trying to complete this action. " +
+                        "Ensure you're properly connected with no firewall blocking this application and try again. " +
+                        "If the problem persists, it may be a server issue.");
+                }
+
+                else
+                {
+                    var name = ex.GetType().Name
+                        .Split(new[] {"Exception"}, StringSplitOptions.RemoveEmptyEntries)
+                        .FirstOrDefault();
+
+                    await dialog.ShowMessageAsync(this,
+                        "Unknown Error",
+                        "An unknown error has occured while trying to complete this action. " +
+                        "Ensure you're properly connected with no firewall blocking this application and try again. " +
+                        $"If you want to provide information to the developer, the name of the error is: '{name}'");
+                }
+
                 switch (discover.RequestedView)
                 {
                     case ComponentView.Categories:
@@ -126,16 +163,9 @@ namespace srb2_mod_management.ViewModels
                         break;
                 }
 
-                // Display error
-                var dialog = SimpleIoc.Default.GetInstance<IDialogCoordinator>();
-                await dialog.ShowMessageAsync(this,
-                    "Network Error",
-                    "A network error occured while trying to complete this action. " +
-                    "Ensure you're properly connected with no firewall blocking this application and try again. " +
-                    "If the problem persists, it may be a server issue.");
-
                 Back();
             }
+            
         }
 
         /// <summary>

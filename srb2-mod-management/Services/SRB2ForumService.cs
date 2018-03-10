@@ -33,6 +33,7 @@ namespace srb2_mod_management.Services
             var version = "1.0.0";
             try { version = Assembly.GetExecutingAssembly().GetName().Version.ToString(); } catch { }
             Client.DefaultRequestHeaders.Add("User-Agent", $"srb2-mod-management/{version}");
+            Client.Timeout = new TimeSpan(0, 0, 10);
         }
 
         public Srb2ForumService(IDownloadedModsRepository modsRepository)
